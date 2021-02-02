@@ -1,2 +1,2 @@
-export 'authentication_params.dart';
+export 'authentication_params_usecase.dart';
 export 'interfaces/iauthentication.dart';
