@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import '../entities/entities.dart';
 
 abstract class IAuthentication {
@@ -6,10 +8,10 @@ abstract class IAuthentication {
 
 class AuthenticationParams {
   final String email;
-  final String password;
+  final String secret;
 
-  AuthenticationParams(
-    this.email,
-    this.password,
-  );
+  AuthenticationParams({
+    @required this.email,
+    @required this.secret,
+  });
 }
