@@ -20,6 +20,14 @@ void main() {
     url = faker.internet.httpUrl();
   });
 
+  group('shared', () {
+    test('should throw InternalServerError if invalid method is provided', () async {
+      final future = sut.request(url: url, method: 'invalid_method');
+
+      expect(future, throwsA(HttpError.internalServerError));
+    });
+  });
+
   group('post', () {
     PostExpectation mockRequest() => when(client.post(any, body: anyNamed('body'), headers: anyNamed('headers')));
 
@@ -100,11 +108,27 @@ void main() {
     });
 
     test('should return UnauthorizedError if post returns 401', () async {
-      mockResponse(400, body: '');
+      mockResponse(401, body: '');
 
       final future = sut.request(url: url, method: 'post');
 
-      expect(future, throwsA(HttpError.badRequest));
+      expect(future, throwsA(HttpError.unauthorized));
+    });
+
+    test('should return ForbiddenError if post returns 403', () async {
+      mockResponse(403, body: '');
+
+      final future = sut.request(url: url, method: 'post');
+
+      expect(future, throwsA(HttpError.forbidden));
+    });
+
+    test('should return NotFoundError if post returns 404', () async {
+      mockResponse(404, body: '');
+
+      final future = sut.request(url: url, method: 'post');
+
+      expect(future, throwsA(HttpError.notFound));
     });
 
     test('should return InternalServerError if post returns 500', () async {

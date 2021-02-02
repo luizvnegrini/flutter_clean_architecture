@@ -21,7 +21,9 @@ class HttpAdapter implements HttpClient {
       'accept': 'application/json',
     };
     final jsonBody = body != null ? jsonEncode(body) : null;
-    final response = await client.post(url, headers: headers, body: jsonBody);
+    var response = Response('', 500);
+
+    if (method == 'post') response = await client.post(url, headers: headers, body: jsonBody);
 
     return _handleResponse(response);
   }
@@ -37,6 +39,12 @@ class HttpAdapter implements HttpClient {
     } else if (response.statusCode == 401) {
       // ignore: only_throw_errors
       throw HttpError.unauthorized;
+    } else if (response.statusCode == 403) {
+      // ignore: only_throw_errors
+      throw HttpError.forbidden;
+    } else if (response.statusCode == 404) {
+      // ignore: only_throw_errors
+      throw HttpError.notFound;
     } else {
       // ignore: only_throw_errors
       throw HttpError.internalServerError;
