@@ -31,9 +31,12 @@ class HttpAdapter implements HttpClient {
       return response.body.isEmpty ? null : jsonDecode(response.body);
     } else if (response.statusCode == 204) {
       return null;
-    } else {
+    } else if (response.statusCode == 400) {
       // ignore: only_throw_errors
       throw HttpError.badRequest;
+    } else {
+      // ignore: only_throw_errors
+      throw HttpError.internalServerError;
     }
   }
 }
