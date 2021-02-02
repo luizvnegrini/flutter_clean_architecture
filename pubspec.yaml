@@ -15,7 +15,6 @@ dependencies:
   faker:
 
 dev_dependencies:
-  conventional_commit:
   flutter_test:
     sdk: flutter
 
