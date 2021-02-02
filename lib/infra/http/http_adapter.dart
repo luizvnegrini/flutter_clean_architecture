@@ -34,6 +34,9 @@ class HttpAdapter implements HttpClient {
     } else if (response.statusCode == 400) {
       // ignore: only_throw_errors
       throw HttpError.badRequest;
+    } else if (response.statusCode == 401) {
+      // ignore: only_throw_errors
+      throw HttpError.unauthorized;
     } else {
       // ignore: only_throw_errors
       throw HttpError.internalServerError;
