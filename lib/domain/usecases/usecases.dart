@@ -1,1 +1,2 @@
-export './iauthentication.dart';
+export 'authentication_params.dart';
+export 'interfaces/iauthentication.dart';

@@ -1,3 +1,4 @@
+import 'package:home_automation/data/usecases/usecases.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/usecases/usecases.dart';
@@ -11,7 +12,7 @@ class RemoteAuthentication {
   RemoteAuthentication({@required this.httpClient, @required this.url});
 
   Future<void> auth(AuthenticationParams params) async {
-    final body = {'email': params.email, 'password': params.secret};
+    final body = RemoteAuthenticationParams.fromDomain(params).toJson();
     await httpClient.request(url: url, method: 'post', body: body);
   }
 }
