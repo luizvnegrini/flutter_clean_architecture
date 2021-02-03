@@ -41,6 +41,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     RaisedButton(
                       onPressed: () {},
+                      textColor: Colors.white,
                       child: Text('Entrar'.toUpperCase()),
                     ),
                     FlatButton.icon(

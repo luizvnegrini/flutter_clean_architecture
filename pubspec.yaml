@@ -11,11 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.0
+
+dev_dependencies:
   test:
   mockito:
   faker:
-
-dev_dependencies:
   flutter_test:
     sdk: flutter
 
@@ -23,3 +23,10 @@ flutter:
   uses-material-design: true
   assets:
     - lib/ui/assets/
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: lib/ui/assets/fonts/Montserrat-Regular.ttf
+    - family: Rubik
+      fonts:
+        - asset: lib/ui/assets/fonts/Rubik-Bold.ttf
