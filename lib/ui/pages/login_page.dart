@@ -40,7 +40,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     RaisedButton(
-                      onPressed: () {},
+                      onPressed: null,
                       textColor: Colors.white,
                       child: Text('Entrar'.toUpperCase()),
                     ),
