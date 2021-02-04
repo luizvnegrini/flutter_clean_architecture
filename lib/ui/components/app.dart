@@ -59,7 +59,7 @@ class App extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             )),
       ),
-      home: LoginPage(),
+      home: const LoginPage(null),
     );
   }
 }

@@ -1,8 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../components/components.dart';
+import '../../components/components.dart';
+import 'ilogin_presenter.dart';
 
 class LoginPage extends StatelessWidget {
+  final ILoginPresenter presenter;
+
+  const LoginPage(this.presenter);
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: SingleChildScrollView(
@@ -24,6 +30,7 @@ class LoginPage extends StatelessWidget {
                           color: Theme.of(context).primaryColorLight,
                         ),
                       ),
+                      onChanged: presenter.validateEmail,
                       keyboardType: TextInputType.emailAddress,
                     ),
                     Padding(
@@ -36,6 +43,7 @@ class LoginPage extends StatelessWidget {
                             color: Theme.of(context).primaryColorLight,
                           ),
                         ),
+                        onChanged: presenter.validatePassword,
                         obscureText: true,
                       ),
                     ),
@@ -56,4 +64,10 @@ class LoginPage extends StatelessWidget {
           ),
         ),
       );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<ILoginPresenter>('presenter', presenter));
+  }
 }
