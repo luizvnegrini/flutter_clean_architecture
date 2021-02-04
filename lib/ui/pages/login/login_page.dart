@@ -53,11 +53,13 @@ class LoginPage extends StatelessWidget {
                                 obscureText: true,
                               )),
                     ),
-                    RaisedButton(
-                      onPressed: null,
-                      textColor: Colors.white,
-                      child: Text('Entrar'.toUpperCase()),
-                    ),
+                    StreamBuilder<bool>(
+                        stream: presenter.isFormValidStream,
+                        builder: (context, snapshot) => RaisedButton(
+                              onPressed: snapshot.data == true ? () {} : null,
+                              textColor: Colors.white,
+                              child: Text('Entrar'.toUpperCase()),
+                            )),
                     FlatButton.icon(
                       onPressed: () {},
                       icon: const Icon(Icons.person),
