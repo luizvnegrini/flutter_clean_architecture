@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:home_automation/ui/components/error_message_component.dart';
 
 import '../../components/components.dart';
 import 'ilogin_presenter.dart';
@@ -41,13 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
             widget.presenter.mainErrorStream.listen((error) {
               if (error != null) {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  backgroundColor: Colors.red[900],
-                  content: Text(
-                    error,
-                    textAlign: TextAlign.center,
-                  ),
-                ));
+                showErrorMessage(context, error);
               }
             });
 
