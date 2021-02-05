@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import './components/components.dart';
-import './components/email_input_component.dart';
 import 'ilogin_presenter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -64,20 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                           EmailInput(),
                           Padding(
                             padding: const EdgeInsets.only(top: 10, bottom: 30),
-                            child: StreamBuilder<String>(
-                                stream: widget.presenter.passwordErrorStream,
-                                builder: (context, snapshot) => TextFormField(
-                                      decoration: InputDecoration(
-                                        labelText: 'Senha',
-                                        icon: Icon(
-                                          Icons.lock,
-                                          color: Theme.of(context).primaryColorLight,
-                                        ),
-                                        errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
-                                      ),
-                                      onChanged: widget.presenter.validatePassword,
-                                      obscureText: true,
-                                    )),
+                            child: PasswordInput(),
                           ),
                           StreamBuilder<bool>(
                               stream: widget.presenter.isFormValidStream,
