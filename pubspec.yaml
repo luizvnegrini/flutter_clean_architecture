@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.0
 
 dev_dependencies:
+  provider:
   flutter_launcher_icons:
   test:
   mockito:

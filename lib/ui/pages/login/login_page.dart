@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:home_automation/ui/components/error_message_component.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import './components/components.dart';
+import './components/email_input_component.dart';
 import 'ilogin_presenter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -54,54 +56,44 @@ class _LoginPageState extends State<LoginPage> {
                   const Headline1('login'),
                   Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Form(
-                        child: Column(
-                      children: [
-                        StreamBuilder<String>(
-                            stream: widget.presenter.emailErrorStream,
-                            builder: (context, snapshot) => TextFormField(
-                                  decoration: InputDecoration(
-                                    labelText: 'Email',
-                                    errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
-                                    icon: Icon(
-                                      Icons.email,
-                                      color: Theme.of(context).primaryColorLight,
-                                    ),
-                                  ),
-                                  onChanged: widget.presenter.validateEmail,
-                                  keyboardType: TextInputType.emailAddress,
-                                )),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 30),
-                          child: StreamBuilder<String>(
-                              stream: widget.presenter.passwordErrorStream,
-                              builder: (context, snapshot) => TextFormField(
-                                    decoration: InputDecoration(
-                                      labelText: 'Senha',
-                                      icon: Icon(
-                                        Icons.lock,
-                                        color: Theme.of(context).primaryColorLight,
+                    child: Provider(
+                      create: (_) => widget.presenter,
+                      child: Form(
+                          child: Column(
+                        children: [
+                          EmailInput(),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 30),
+                            child: StreamBuilder<String>(
+                                stream: widget.presenter.passwordErrorStream,
+                                builder: (context, snapshot) => TextFormField(
+                                      decoration: InputDecoration(
+                                        labelText: 'Senha',
+                                        icon: Icon(
+                                          Icons.lock,
+                                          color: Theme.of(context).primaryColorLight,
+                                        ),
+                                        errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
                                       ),
-                                      errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
-                                    ),
-                                    onChanged: widget.presenter.validatePassword,
-                                    obscureText: true,
+                                      onChanged: widget.presenter.validatePassword,
+                                      obscureText: true,
+                                    )),
+                          ),
+                          StreamBuilder<bool>(
+                              stream: widget.presenter.isFormValidStream,
+                              builder: (context, snapshot) => RaisedButton(
+                                    onPressed: snapshot.data == true ? widget.presenter.auth : null,
+                                    textColor: Colors.white,
+                                    child: Text('Entrar'.toUpperCase()),
                                   )),
-                        ),
-                        StreamBuilder<bool>(
-                            stream: widget.presenter.isFormValidStream,
-                            builder: (context, snapshot) => RaisedButton(
-                                  onPressed: snapshot.data == true ? widget.presenter.auth : null,
-                                  textColor: Colors.white,
-                                  child: Text('Entrar'.toUpperCase()),
-                                )),
-                        FlatButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.person),
-                          label: const Text('Criar conta'),
-                        )
-                      ],
-                    )),
+                          FlatButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.person),
+                            label: const Text('Criar conta'),
+                          )
+                        ],
+                      )),
+                    ),
                   )
                 ],
               ),
