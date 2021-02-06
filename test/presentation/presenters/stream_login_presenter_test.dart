@@ -40,18 +40,14 @@ void main() {
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateEmail(email);
-    // ignore: cascade_invocations
-    sut.validateEmail(email);
+    sut..validateEmail(email)..validateEmail(email);
   });
 
   test('should emit null if email validation succeeds', () {
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateEmail(email);
-    // ignore: cascade_invocations
-    sut.validateEmail(email);
+    sut..validateEmail(email)..validateEmail(email);
   });
 
   test('should call validation with correct password', () {
@@ -66,17 +62,25 @@ void main() {
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validatePassword(password);
-    // ignore: cascade_invocations
-    sut.validatePassword(password);
+    sut..validatePassword(password)..validatePassword(password);
   });
 
   test('should emit null if password validation succeeds', () {
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validatePassword(password);
-    // ignore: cascade_invocations
-    sut.validatePassword(password);
+    sut..validatePassword(password)..validatePassword(password);
+  });
+
+  test('should emit password error if validation fails', () {
+    mockValidation(field: 'email', value: 'error');
+
+    sut.emailErrorStream.listen((error) => expect(error, 'error'));
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut
+      ..validateEmail(password)
+      ..validatePassword(password);
   });
 }
