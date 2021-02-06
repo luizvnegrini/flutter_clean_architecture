@@ -8,12 +8,12 @@ environment:
 
 dependencies:
   http:
+  provider:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.0
 
 dev_dependencies:
-  provider:
   flutter_launcher_icons:
   test:
   mockito:
