@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:home_automation/domain/usecases/usecases.dart';
 import 'package:meta/meta.dart';
 
 import '../../protocols/protocols.dart';
@@ -6,7 +7,8 @@ import '../../protocols/protocols.dart';
 import 'login_state.dart';
 
 class StreamLoginPresenter {
-  final Validation validation;
+  final IValidation validation;
+  final IAuthentication authentication;
   final _controller = StreamController<LoginState>.broadcast();
 
   final _state = LoginState();
@@ -15,9 +17,13 @@ class StreamLoginPresenter {
   Stream<String> get passwordErrorStream => _controller.stream.map((state) => state.passwordError).distinct();
   Stream<bool> get isFormValidStream => _controller.stream.map((state) => state.isFormValid).distinct();
 
-  StreamLoginPresenter({@required this.validation});
+  StreamLoginPresenter({@required this.validation, @required this.authentication});
 
   void _update() => _controller.add(_state);
+
+  Future<void> auth() async {
+    await authentication.auth(AuthenticationParams(email: _state.email, secret: _state.password));
+  }
 
   void validateEmail(String email) {
     _state
