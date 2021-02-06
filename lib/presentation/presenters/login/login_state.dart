@@ -1,5 +1,8 @@
 class LoginState {
   String emailError;
   String passwordError;
-  bool get isFormValid => false;
+  String email;
+  String password;
+
+  bool get isFormValid => emailError == null && passwordError == null && email != null && password != null;
 }

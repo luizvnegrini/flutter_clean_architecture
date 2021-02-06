@@ -83,4 +83,16 @@ void main() {
       ..validateEmail(password)
       ..validatePassword(password);
   });
+
+  test('should emit password error if validation fails', () async {
+    sut.emailErrorStream.listen((error) => expect(error, null));
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+
+    // ignore: unawaited_futures
+    expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
+
+    sut.validateEmail(password);
+    await Future.delayed(Duration.zero);
+    sut.validatePassword(password);
+  });
 }
