@@ -1,9 +1,10 @@
 import 'package:faker/faker.dart';
-import 'package:home_automation/domain/usecases/usecases.dart';
-import 'package:home_automation/presentation/presenters/login/stream_login_presenter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:home_automation/domain/entities/entities.dart';
+import 'package:home_automation/domain/usecases/usecases.dart';
+import 'package:home_automation/presentation/presenters/presenters.dart';
 import 'package:home_automation/presentation/protocols/protocols.dart';
 
 class ValidationSpy extends Mock implements IValidation {}
@@ -19,8 +20,14 @@ void main() {
 
   PostExpectation mockValidationCall(String field) => when(validation.validate(field: field ?? anyNamed('field'), value: anyNamed('value')));
 
+  PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
+
   void mockValidation({String field, String value}) {
     mockValidationCall(field).thenReturn(value);
+  }
+
+  void mockAuthentication() {
+    mockAuthenticationCall().thenAnswer((_) async => AccountEntity(faker.guid.guid()));
   }
 
   setUp(() {
@@ -31,6 +38,7 @@ void main() {
     password = faker.internet.password();
 
     mockValidation();
+    mockAuthentication();
   });
 
   test('should call validation with correct email', () {
@@ -109,5 +117,16 @@ void main() {
     await sut.auth();
 
     verify(authentication.auth(AuthenticationParams(email: email, secret: password))).called(1);
+  });
+
+  test('should emit correct events on Authentication success', () async {
+    sut
+      ..validateEmail(email)
+      ..validatePassword(password);
+
+    // ignore: unawaited_futures
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+
+    await sut.auth();
   });
 }
