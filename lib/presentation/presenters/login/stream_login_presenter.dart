@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:home_automation/domain/enums/enums.dart';
 import 'package:home_automation/domain/usecases/usecases.dart';
 import 'package:meta/meta.dart';
 
+import '../../../utils/extensions/extensions.dart';
 import '../../protocols/protocols.dart';
 
 import 'login_state.dart';
@@ -15,6 +17,7 @@ class StreamLoginPresenter {
 
   Stream<String> get emailErrorStream => _controller.stream.map((state) => state.emailError).distinct();
   Stream<String> get passwordErrorStream => _controller.stream.map((state) => state.passwordError).distinct();
+  Stream<String> get mainErrorStream => _controller.stream.map((state) => state.mainError).distinct();
   Stream<bool> get isFormValidStream => _controller.stream.map((state) => state.isFormValid).distinct();
   Stream<bool> get isLoadingStream => _controller.stream.map((state) => state.isLoading).distinct();
 
@@ -23,11 +26,16 @@ class StreamLoginPresenter {
   void _update() => _controller.add(_state);
 
   Future<void> auth() async {
-    _state.isLoading = true;
-    _update();
-    await authentication.auth(AuthenticationParams(email: _state.email, secret: _state.password));
-    _state.isLoading = false;
-    _update();
+    try {
+      _state.isLoading = true;
+      _update();
+      await authentication.auth(AuthenticationParams(email: _state.email, secret: _state.password));
+    } on DomainError catch (error) {
+      _state.mainError = error.description;
+    } finally {
+      _state.isLoading = false;
+      _update();
+    }
   }
 
   void validateEmail(String email) {
