@@ -12,7 +12,7 @@ class RequiredFieldValidation implements FieldValidation {
   RequiredFieldValidation(this.field);
 
   @override
-  String validate(String value) => null;
+  String validate(String value) => value.isEmpty ? 'Campo obrigatório.' : null;
 }
 
 void main() {
@@ -22,5 +22,13 @@ void main() {
     final error = sut.validate('any_value');
 
     expect(error, null);
+  });
+
+  test('should return null if value is empty', () {
+    final sut = RequiredFieldValidation('any_field');
+
+    final error = sut.validate('');
+
+    expect(error, 'Campo obrigatório.');
   });
 }
