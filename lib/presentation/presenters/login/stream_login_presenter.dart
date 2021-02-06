@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:home_automation/domain/enums/enums.dart';
-import 'package:home_automation/domain/usecases/usecases.dart';
 import 'package:meta/meta.dart';
 
+import '../../../domain/enums/enums.dart';
+import '../../../domain/usecases/usecases.dart';
 import '../../../utils/extensions/extensions.dart';
 import '../../protocols/protocols.dart';
 
