@@ -11,19 +11,19 @@ import 'login_state.dart';
 class StreamLoginPresenter {
   final IValidation validation;
   final IAuthentication authentication;
-  final _controller = StreamController<LoginState>.broadcast();
+  var _controller = StreamController<LoginState>.broadcast();
 
   final _state = LoginState();
 
-  Stream<String> get emailErrorStream => _controller.stream.map((state) => state.emailError).distinct();
-  Stream<String> get passwordErrorStream => _controller.stream.map((state) => state.passwordError).distinct();
-  Stream<String> get mainErrorStream => _controller.stream.map((state) => state.mainError).distinct();
-  Stream<bool> get isFormValidStream => _controller.stream.map((state) => state.isFormValid).distinct();
-  Stream<bool> get isLoadingStream => _controller.stream.map((state) => state.isLoading).distinct();
+  Stream<String> get emailErrorStream => _controller?.stream?.map((state) => state.emailError)?.distinct();
+  Stream<String> get passwordErrorStream => _controller?.stream?.map((state) => state.passwordError)?.distinct();
+  Stream<String> get mainErrorStream => _controller?.stream?.map((state) => state.mainError)?.distinct();
+  Stream<bool> get isFormValidStream => _controller?.stream?.map((state) => state.isFormValid)?.distinct();
+  Stream<bool> get isLoadingStream => _controller?.stream?.map((state) => state.isLoading)?.distinct();
 
   StreamLoginPresenter({@required this.validation, @required this.authentication});
 
-  void _update() => _controller.add(_state);
+  void _update() => _controller?.add(_state);
 
   Future<void> auth() async {
     try {
@@ -54,5 +54,6 @@ class StreamLoginPresenter {
 
   void dispose() {
     _controller.close();
+    _controller = null;
   }
 }

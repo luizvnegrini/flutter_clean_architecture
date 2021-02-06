@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
-import 'package:home_automation/domain/enums/enums.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:home_automation/domain/enums/enums.dart';
 import 'package:home_automation/domain/entities/entities.dart';
 import 'package:home_automation/domain/usecases/usecases.dart';
 import 'package:home_automation/presentation/presenters/presenters.dart';
@@ -159,5 +159,13 @@ void main() {
     sut.mainErrorStream.listen(expectAsync1((error) => expect(error, 'Algo errado aconteceu. Tente novamente em breve')));
 
     await sut.auth();
+  });
+
+  test('should not emit after dispose', () {
+    expectLater(sut.emailErrorStream, neverEmits(null));
+
+    sut
+      ..dispose()
+      ..validateEmail(email);
   });
 }
