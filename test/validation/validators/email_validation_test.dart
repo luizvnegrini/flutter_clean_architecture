@@ -8,7 +8,13 @@ class EmailValidation implements IFieldValidation {
   EmailValidation(this.field);
 
   @override
-  String validate(String value) => null;
+  String validate(String value) {
+    final regex = RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+    final isValid = value?.isNotEmpty != true || regex.hasMatch(value);
+
+    return isValid ? null : 'Campo invávlido.';
+  }
 }
 
 void main() {
@@ -28,5 +34,13 @@ void main() {
     final error = sut.validate(null);
 
     expect(error, null);
+  });
+
+  test('should return null if email is valid', () {
+    expect(sut.validate('ca@flutter.com'), null);
+  });
+
+  test('should return error if email is invalid', () {
+    expect(sut.validate('ca.com'), 'Campo invávlido.');
   });
 }
