@@ -12,7 +12,17 @@ class ValidationComposite implements IValidation {
   ValidationComposite(this.validations);
 
   @override
-  String validate({@required String field, @required String value}) => null;
+  String validate({@required String field, @required String value}) {
+    String error;
+
+    for (final validation in validations) {
+      error = validation.validate(value);
+
+      if (error?.isNotEmpty == true) return error;
+    }
+
+    return error;
+  }
 }
 
 class FieldValidationSpy extends Mock implements IFieldValidation {}
@@ -57,5 +67,15 @@ void main() {
     final error = sut.validate(field: 'any_field', value: 'any_value');
 
     expect(error, null);
+  });
+
+  test('should return the first error when if have one or more errors', () {
+    mockValidation1('error_1');
+    mockValidation2('error_2');
+    mockValidation3('error_3');
+
+    final error = sut.validate(field: 'any_field', value: 'any_value');
+
+    expect(error, 'error_1');
   });
 }
