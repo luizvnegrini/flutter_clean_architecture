@@ -2,14 +2,13 @@ import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:home_automation/data/http/http.dart';
 import 'package:home_automation/domain/enums/enums.dart';
 import 'package:home_automation/domain/usecases/usecases.dart';
-
 import 'package:home_automation/data/enums/enums.dart';
 import 'package:home_automation/data/usecases/usecases.dart';
-import 'package:home_automation/data/http/http_client.dart';
 
-class HttpClientSpy extends Mock implements HttpClient {}
+class HttpClientSpy extends Mock implements IHttpClient {}
 
 void main() {
   HttpClientSpy httpClient;
