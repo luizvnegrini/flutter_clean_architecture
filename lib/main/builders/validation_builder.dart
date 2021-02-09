@@ -4,12 +4,13 @@ import '../../validation/validators/validators.dart';
 class ValidationBuilder {
   // ignore: unused_field
   static ValidationBuilder _instance;
-
   String fieldName;
   List<IFieldValidation> validations = [];
 
+  ValidationBuilder._();
+
   // ignore: prefer_constructors_over_static_methods
-  static ValidationBuilder field(String fieldName) => _instance = ValidationBuilder()..fieldName = fieldName;
+  static ValidationBuilder field(String fieldName) => _instance = ValidationBuilder._()..fieldName = fieldName;
 
   // ignore: avoid_returning_this
   ValidationBuilder required() {
