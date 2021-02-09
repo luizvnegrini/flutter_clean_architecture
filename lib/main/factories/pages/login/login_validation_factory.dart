@@ -1,8 +1,11 @@
-import 'package:home_automation/presentation/protocols/ivalidation.dart';
-import 'package:home_automation/validation/validators/validators.dart';
+import '../../../../presentation/protocols/ivalidation.dart';
+import '../../../../validation/protocols/ifield_validation.dart';
+import '../../../../validation/validators/validators.dart';
 
-IValidation makeLoginValidation() => ValidationComposite([
-      RequiredFieldValidation('email'),
-      EmailValidation('email'),
-      RequiredFieldValidation('password'),
-    ]);
+IValidation makeLoginValidation() => ValidationComposite(makeLoginValidations());
+
+List<IFieldValidation> makeLoginValidations() => [
+      const RequiredFieldValidation('email'),
+      const EmailValidation('email'),
+      const RequiredFieldValidation('password'),
+    ];
