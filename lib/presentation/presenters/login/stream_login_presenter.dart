@@ -3,11 +3,10 @@ import 'package:meta/meta.dart';
 
 import '../../../domain/enums/enums.dart';
 import '../../../domain/usecases/usecases.dart';
+import '../../../presentation/presenters/login/login_state.dart';
 import '../../../ui/pages/pages.dart';
 import '../../../utils/extensions/extensions.dart';
 import '../../protocols/protocols.dart';
-
-import 'login_state.dart';
 
 class StreamLoginPresenter implements ILoginPresenter {
   final IValidation validation;
