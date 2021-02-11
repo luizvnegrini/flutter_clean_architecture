@@ -11,6 +11,7 @@ import '../../protocols/protocols.dart';
 class StreamLoginPresenter implements ILoginPresenter {
   final IValidation validation;
   final IAuthentication authentication;
+  final ISaveCurrentAccount saveCurrentAccount;
   var _controller = StreamController<LoginState>.broadcast();
 
   final _state = LoginState();
@@ -26,7 +27,7 @@ class StreamLoginPresenter implements ILoginPresenter {
   @override
   Stream<bool> get isLoadingStream => _controller?.stream?.map((state) => state.isLoading)?.distinct();
 
-  StreamLoginPresenter({@required this.validation, @required this.authentication});
+  StreamLoginPresenter({@required this.validation, @required this.authentication, @required this.saveCurrentAccount});
 
   void _update() => _controller?.add(_state);
 
@@ -35,7 +36,8 @@ class StreamLoginPresenter implements ILoginPresenter {
     try {
       _state.isLoading = true;
       _update();
-      await authentication.auth(AuthenticationParams(email: _state.email, secret: _state.password));
+      final account = await authentication.auth(AuthenticationParams(email: _state.email, secret: _state.password));
+      await saveCurrentAccount.save(account);
     } on DomainError catch (error) {
       _state.mainError = error.description;
     } finally {

@@ -7,6 +7,7 @@ import '../../factories.dart';
 ILoginPresenter makeStreamLoginPresenter() => StreamLoginPresenter(
       validation: makeLoginValidation(),
       authentication: makeRemoteAuthentication(),
+      saveCurrentAccount: makeLocalSaveCurrentAccount(),
     );
 
 ILoginPresenter makeGetxLoginPresenter() => GetxLoginPresenter(
