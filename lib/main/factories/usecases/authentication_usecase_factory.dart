@@ -1,4 +1,4 @@
-import '../../../data/usecases/remote_authentication_usecase.dart';
+import '../../../data/usecases/authentication/remote_authentication_usecase.dart';
 import '../../../domain/usecases/usecases.dart';
 import '../http/http.dart';
 
