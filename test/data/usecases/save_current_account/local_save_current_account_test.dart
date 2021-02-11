@@ -1,36 +1,16 @@
 import 'package:faker/faker.dart';
-import 'package:home_automation/domain/enums/enums.dart';
-import 'package:meta/meta.dart';
-import 'package:home_automation/domain/entities/account_entity.dart';
-import 'package:home_automation/domain/usecases/interfaces/isave_current_account_usecase.dart';
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
 
-class LocalSaveCurrentAccount implements ISaveCurrentAccount {
-  final SaveSecureCacheStorage saveSecureCacheStorage;
+import 'package:home_automation/domain/enums/enums.dart';
+import 'package:home_automation/domain/entities/entities.dart';
+import 'package:home_automation/data/cache/cache.dart';
+import 'package:home_automation/data/usecases/usecases.dart';
 
-  LocalSaveCurrentAccount({@required this.saveSecureCacheStorage});
-
-  @override
-  Future<void> save(AccountEntity account) async {
-    try {
-      await saveSecureCacheStorage.saveSecure(key: 'token', value: account.token);
-      // ignore: avoid_catches_without_on_clauses
-    } catch (error) {
-      // ignore: only_throw_errors
-      throw DomainError.unexpected;
-    }
-  }
-}
-
-abstract class SaveSecureCacheStorage {
-  Future<void> saveSecure({String key, String value});
-}
-
-class SaveSecureCacheStorageSpy extends Mock implements SaveSecureCacheStorage {}
+class SaveSecureCacheStorageSpy extends Mock implements ISaveSecureCacheStorage {}
 
 void main() {
-  LocalSaveCurrentAccount sut;
+  LocalSaveCurrentAccountUsecase sut;
   SaveSecureCacheStorageSpy saveSecureCacheStorage;
   AccountEntity account;
 
@@ -40,7 +20,7 @@ void main() {
 
   setUp(() {
     saveSecureCacheStorage = SaveSecureCacheStorageSpy();
-    sut = LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
+    sut = LocalSaveCurrentAccountUsecase(saveSecureCacheStorage: saveSecureCacheStorage);
     account = AccountEntity(faker.guid.guid());
   });
 
