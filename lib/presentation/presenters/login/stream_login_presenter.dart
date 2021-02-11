@@ -17,16 +17,12 @@ class StreamLoginPresenter implements ILoginPresenter {
 
   @override
   Stream<String> get emailErrorStream => _controller?.stream?.map((state) => state.emailError)?.distinct();
-
   @override
   Stream<String> get passwordErrorStream => _controller?.stream?.map((state) => state.passwordError)?.distinct();
-
   @override
   Stream<String> get mainErrorStream => _controller?.stream?.map((state) => state.mainError)?.distinct();
-
   @override
   Stream<bool> get isFormValidStream => _controller?.stream?.map((state) => state.isFormValid)?.distinct();
-
   @override
   Stream<bool> get isLoadingStream => _controller?.stream?.map((state) => state.isLoading)?.distinct();
 

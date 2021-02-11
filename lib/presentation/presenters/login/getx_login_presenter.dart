@@ -10,6 +10,7 @@ import '../../protocols/protocols.dart';
 class GetxLoginPresenter extends GetxController implements ILoginPresenter {
   final IValidation validation;
   final IAuthentication authentication;
+  final ISaveCurrentAccount saveCurrentAccount;
 
   String _email;
   String _password;
@@ -30,13 +31,14 @@ class GetxLoginPresenter extends GetxController implements ILoginPresenter {
   @override
   Stream<bool> get isLoadingStream => _isLoadingObserver.stream;
 
-  GetxLoginPresenter({@required this.validation, @required this.authentication});
+  GetxLoginPresenter({@required this.validation, @required this.authentication, @required this.saveCurrentAccount});
 
   @override
   Future<void> auth() async {
     try {
       _isLoadingObserver.value = true;
-      await authentication.auth(AuthenticationParams(email: _email, secret: _password));
+      final account = await authentication.auth(AuthenticationParams(email: _email, secret: _password));
+      await saveCurrentAccount.save(account);
     } on DomainError catch (error) {
       _mainErrorObserver.value = error.description;
     } finally {

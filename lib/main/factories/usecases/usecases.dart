@@ -1,1 +1,1 @@
-export './authentication_usecase_factory.dart';
+export 'authentication_factory.dart';
