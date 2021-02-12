@@ -22,8 +22,9 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
       initialRoute: '/login',
-      getPages: const [
-        GetPage(name: '/login', page: makeLoginPage),
+      getPages: [
+        const GetPage(name: '/login', page: makeLoginPage),
+        GetPage(name: '/home', page: () => const Scaffold(body: Text('home'))),
       ],
     );
   }

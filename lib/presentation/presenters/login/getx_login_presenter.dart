@@ -17,6 +17,7 @@ class GetxLoginPresenter extends GetxController implements ILoginPresenter {
   final _emailErrorObserver = RxString();
   final _passwordErrorObserver = RxString();
   final _mainErrorObserver = RxString();
+  final _navigateToObserver = RxString();
   final _isFormValidObserver = false.obs;
   final _isLoadingObserver = false.obs;
 
@@ -26,6 +27,8 @@ class GetxLoginPresenter extends GetxController implements ILoginPresenter {
   Stream<String> get passwordErrorStream => _passwordErrorObserver.stream;
   @override
   Stream<String> get mainErrorStream => _mainErrorObserver.stream;
+  @override
+  Stream<String> get navigateToStream => _navigateToObserver.stream;
   @override
   Stream<bool> get isFormValidStream => _isFormValidObserver.stream;
   @override
@@ -39,6 +42,8 @@ class GetxLoginPresenter extends GetxController implements ILoginPresenter {
       _isLoadingObserver.value = true;
       final account = await authentication.auth(AuthenticationParams(email: _email, secret: _password));
       await saveCurrentAccount.save(account);
+
+      _navigateToObserver.value = '/home';
     } on DomainError catch (error) {
       _mainErrorObserver.value = error.description;
     } finally {

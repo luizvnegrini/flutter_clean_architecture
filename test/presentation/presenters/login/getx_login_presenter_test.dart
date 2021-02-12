@@ -161,6 +161,17 @@ void main() {
     await sut.auth();
   });
 
+  test('should change to home page on success', () async {
+    sut
+      ..validateEmail(email)
+      ..validatePassword(password);
+
+    // ignore: unawaited_futures
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/home')));
+
+    await sut.auth();
+  });
+
   test('should emit correct events on InvalidCredentialsError', () async {
     mockAuthenticationError(DomainError.invalidCredentials);
     sut
