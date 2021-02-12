@@ -25,10 +25,15 @@ class GetxSplashScreenPresenter implements ISplashScreenPresenter {
 class LoadCurrentAccountSpy extends Mock implements ILoadCurrentAccount {}
 
 void main() {
-  test('should call LoadCurrentAccount', () async {
-    final loadCurrentAccount = LoadCurrentAccountSpy();
-    final sut = GetxSplashScreenPresenter(loadCurrentAccount: loadCurrentAccount);
+  LoadCurrentAccountSpy loadCurrentAccount;
+  GetxSplashScreenPresenter sut;
 
+  setUp(() {
+    loadCurrentAccount = LoadCurrentAccountSpy();
+    sut = GetxSplashScreenPresenter(loadCurrentAccount: loadCurrentAccount);
+  });
+
+  test('should call LoadCurrentAccount', () async {
     await sut.checkAccount();
 
     verify(loadCurrentAccount.load()).called(1);
