@@ -1,49 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
-import 'package:get/route_manager.dart';
-
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-class SplashScreenPage extends StatelessWidget {
-  final ISplashScreenPresenter presenter;
-
-  const SplashScreenPage({@required this.presenter});
-
-  @override
-  Widget build(BuildContext context) {
-    presenter.loadCurrentAccount();
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home automation')),
-      body: Builder(
-        builder: (context) {
-          presenter.navigateToStream.listen((page) {
-            if (page?.isNotEmpty == true) Get.offAllNamed(page);
-          });
-
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
-    );
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<ISplashScreenPresenter>('presenter', presenter));
-  }
-}
-
-abstract class ISplashScreenPresenter {
-  Stream<String> get navigateToStream;
-  Future<void> loadCurrentAccount();
-}
+import 'package:home_automation/ui/pages/pages.dart';
 
 class SplashScreenPresenterSpy extends Mock implements ISplashScreenPresenter {}
 
@@ -96,10 +58,10 @@ void main() {
 
     navigateToController.add('');
     await tester.pump();
-    expect(Get.currentRoute, '/login');
+    expect(Get.currentRoute, '/');
 
     navigateToController.add(null);
     await tester.pump();
-    expect(Get.currentRoute, '/login');
+    expect(Get.currentRoute, '/');
   });
 }

@@ -230,10 +230,10 @@ void main() {
 
     navigateToController.add('');
     await tester.pump();
-    expect(Get.currentRoute, '/');
+    expect(Get.currentRoute, '/login');
 
     navigateToController.add(null);
     await tester.pump();
-    expect(Get.currentRoute, '/');
+    expect(Get.currentRoute, '/login');
   });
 }
