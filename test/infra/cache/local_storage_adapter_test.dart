@@ -40,8 +40,14 @@ void main() {
   });
 
   group('fetchSecure', () {
+    PostExpectation mockFetchSecureCall() => when(secureStorage.read(key: anyNamed('key')));
+
     void mockFetchSecure() {
-      when(secureStorage.read(key: anyNamed('key'))).thenAnswer((_) async => value);
+      mockFetchSecureCall().thenAnswer((_) async => value);
+    }
+
+    void mockFetchSecureError() {
+      mockFetchSecureCall().thenThrow(Exception());
     }
 
     setUp(mockFetchSecure);
@@ -56,6 +62,14 @@ void main() {
       final fetchedValue = await sut.fetchSecure(key);
 
       expect(fetchedValue, value);
+    });
+
+    test('should throw if fetch secure throws', () async {
+      mockFetchSecureError();
+
+      final future = sut.fetchSecure(key);
+
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 }
