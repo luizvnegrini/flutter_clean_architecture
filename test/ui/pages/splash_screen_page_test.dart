@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:get/route_manager.dart';
@@ -17,8 +19,16 @@ class SplashScreenPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Home automation')),
-      body: const Center(
-        child: CircularProgressIndicator(),
+      body: Builder(
+        builder: (context) {
+          presenter.navigateToStream.listen((page) {
+            if (page?.isNotEmpty == true) Get.offAllNamed(page);
+          });
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
@@ -31,6 +41,7 @@ class SplashScreenPage extends StatelessWidget {
 }
 
 abstract class ISplashScreenPresenter {
+  Stream<String> get navigateToStream;
   Future<void> loadCurrentAccount();
 }
 
@@ -38,22 +49,25 @@ class SplashScreenPresenterSpy extends Mock implements ISplashScreenPresenter {}
 
 void main() {
   SplashScreenPresenterSpy presenter;
+  StreamController<String> navigateToController;
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = SplashScreenPresenterSpy();
+    navigateToController = StreamController<String>();
+    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
 
     return tester.pumpWidget(GetMaterialApp(
       initialRoute: '/',
       getPages: [
-        GetPage(
-          name: '/',
-          page: () => SplashScreenPage(
-            presenter: presenter,
-          ),
-        )
+        GetPage(name: '/', page: () => SplashScreenPage(presenter: presenter)),
+        GetPage(name: '/any_route', page: () => const Scaffold(body: Text('fake page'))),
       ],
     ));
   }
+
+  tearDown(() {
+    navigateToController.close();
+  });
 
   testWidgets('should present spinner on page load', (WidgetTester tester) async {
     await loadPage(tester);
@@ -65,5 +79,27 @@ void main() {
     await loadPage(tester);
 
     verify(presenter.loadCurrentAccount()).called(1);
+  });
+
+  testWidgets('should load page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('/any_route');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/any_route');
+    expect(find.text('fake page'), findsOneWidget);
+  });
+
+  testWidgets('should not change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('');
+    await tester.pump();
+    expect(Get.currentRoute, '/login');
+
+    navigateToController.add(null);
+    await tester.pump();
+    expect(Get.currentRoute, '/login');
   });
 }
