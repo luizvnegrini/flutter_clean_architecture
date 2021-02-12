@@ -1,34 +1,10 @@
 import 'package:faker/faker.dart';
-import 'package:meta/meta.dart';
-import 'package:get/get.dart';
-import 'package:home_automation/ui/pages/pages.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:home_automation/presentation/presenters/presenters.dart';
 import 'package:home_automation/domain/entities/account_entity.dart';
 import 'package:home_automation/domain/usecases/usecases.dart';
-
-class GetxSplashScreenPresenter implements ISplashScreenPresenter {
-  final ILoadCurrentAccount loadCurrentAccount;
-  final _navigateToObserver = RxString();
-
-  GetxSplashScreenPresenter({@required this.loadCurrentAccount});
-
-  @override
-  Stream<String> get navigateToStream => _navigateToObserver.stream;
-
-  @override
-  Future<void> checkAccount() async {
-    try {
-      final account = await loadCurrentAccount.load();
-
-      _navigateToObserver.value = account == null ? '/login' : '/home';
-      // ignore: avoid_catches_without_on_clauses
-    } catch (error) {
-      _navigateToObserver.value = '/login';
-    }
-  }
-}
 
 class LoadCurrentAccountSpy extends Mock implements ILoadCurrentAccount {}
 
