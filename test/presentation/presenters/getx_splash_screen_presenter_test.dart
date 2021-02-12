@@ -1,3 +1,4 @@
+import 'package:faker/faker.dart';
 import 'package:meta/meta.dart';
 import 'package:get/get.dart';
 import 'package:home_automation/ui/pages/pages.dart';
@@ -18,9 +19,9 @@ class GetxSplashScreenPresenter implements ISplashScreenPresenter {
 
   @override
   Future<void> checkAccount() async {
-    await loadCurrentAccount.load();
+    final account = await loadCurrentAccount.load();
 
-    _navigateToObserver.value = '/home';
+    _navigateToObserver.value = account == null ? '/login' : '/home';
   }
 }
 
@@ -30,9 +31,15 @@ void main() {
   LoadCurrentAccountSpy loadCurrentAccount;
   GetxSplashScreenPresenter sut;
 
+  void mockLoadCurrentAccount({AccountEntity account}) {
+    when(loadCurrentAccount.load()).thenAnswer((_) async => account);
+  }
+
   setUp(() {
     loadCurrentAccount = LoadCurrentAccountSpy();
     sut = GetxSplashScreenPresenter(loadCurrentAccount: loadCurrentAccount);
+
+    mockLoadCurrentAccount(account: AccountEntity(faker.guid.guid()));
   });
 
   test('should call LoadCurrentAccount', () async {
@@ -43,6 +50,14 @@ void main() {
 
   test('should go to home page on sucess', () async {
     sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/home')));
+
+    await sut.checkAccount();
+  });
+
+  test('should go to login page on null result', () async {
+    mockLoadCurrentAccount(account: null);
+
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/login')));
 
     await sut.checkAccount();
   });
