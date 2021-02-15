@@ -3,8 +3,10 @@ import 'package:meta/meta.dart';
 
 import '../../domain/enums/enums.dart';
 import '../../domain/usecases/usecases.dart';
+import '../../presentation/enums/enums.dart';
+
+import '../../ui/helpers/errors/ui_error.dart';
 import '../../ui/pages/pages.dart';
-import '../../utils/extensions/extensions.dart';
 import '../protocols/protocols.dart';
 
 class GetxLoginPresenter extends GetxController implements ILoginPresenter {
@@ -14,19 +16,19 @@ class GetxLoginPresenter extends GetxController implements ILoginPresenter {
 
   String _email;
   String _password;
-  final _emailErrorObserver = RxString();
-  final _passwordErrorObserver = RxString();
-  final _mainErrorObserver = RxString();
+  final _emailErrorObserver = Rx<UIError>();
+  final _passwordErrorObserver = Rx<UIError>();
+  final _mainErrorObserver = Rx<UIError>();
   final _navigateToObserver = RxString();
   final _isFormValidObserver = false.obs;
   final _isLoadingObserver = false.obs;
 
   @override
-  Stream<String> get emailErrorStream => _emailErrorObserver.stream;
+  Stream<UIError> get emailErrorStream => _emailErrorObserver.stream;
   @override
-  Stream<String> get passwordErrorStream => _passwordErrorObserver.stream;
+  Stream<UIError> get passwordErrorStream => _passwordErrorObserver.stream;
   @override
-  Stream<String> get mainErrorStream => _mainErrorObserver.stream;
+  Stream<UIError> get mainErrorStream => _mainErrorObserver.stream;
   @override
   Stream<String> get navigateToStream => _navigateToObserver.stream;
   @override
@@ -45,7 +47,18 @@ class GetxLoginPresenter extends GetxController implements ILoginPresenter {
 
       _navigateToObserver.value = '/home';
     } on DomainError catch (error) {
-      _mainErrorObserver.value = error.description;
+      switch (error) {
+        case DomainError.invalidCredentials:
+          _mainErrorObserver.value = UIError.invalidCredentials;
+          break;
+
+        case DomainError.unexpected:
+          _mainErrorObserver.value = UIError.unexpected;
+          break;
+
+        default:
+          _mainErrorObserver.value = UIError.unexpected;
+      }
     } finally {
       _isLoadingObserver.value = false;
     }
@@ -54,15 +67,32 @@ class GetxLoginPresenter extends GetxController implements ILoginPresenter {
   @override
   void validateEmail(String email) {
     _email = email;
-    _emailErrorObserver.value = validation.validate(field: 'email', value: email);
+    _emailErrorObserver.value = _validateField(field: 'email', value: email);
     _validateForm();
   }
 
   @override
   void validatePassword(String password) {
     _password = password;
-    _passwordErrorObserver.value = validation.validate(field: 'password', value: password);
+    _passwordErrorObserver.value = _validateField(field: 'password', value: password);
     _validateForm();
+  }
+
+  UIError _validateField({String field, String value}) {
+    final error = validation.validate(field: field, value: value);
+
+    switch (error) {
+      case ValidationError.invalidField:
+        return UIError.invalidField;
+        break;
+
+      case ValidationError.requiredField:
+        return UIError.requiredField;
+        break;
+
+      default:
+        return null;
+    }
   }
 
   void _validateForm() {

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../ui/helpers/errors/ui_error.dart';
+import '../../../../utils/extensions/enum_extensions.dart';
+import '../../../../utils/i18n/resources.dart';
 import '../../pages.dart';
 
 class PasswordInput extends StatelessWidget {
@@ -8,16 +11,16 @@ class PasswordInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final presenter = Provider.of<ILoginPresenter>(context);
 
-    return StreamBuilder<String>(
+    return StreamBuilder<UIError>(
         stream: presenter.passwordErrorStream,
         builder: (context, snapshot) => TextFormField(
               decoration: InputDecoration(
-                labelText: 'Senha',
+                labelText: R.strings.password,
                 icon: Icon(
                   Icons.lock,
                   color: Theme.of(context).primaryColorLight,
                 ),
-                errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
+                errorText: snapshot.hasData == true ? snapshot.data.description : null,
               ),
               onChanged: presenter.validatePassword,
               obscureText: true,

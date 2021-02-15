@@ -1,16 +1,19 @@
-import 'package:home_automation/domain/enums/enums.dart';
+import 'package:home_automation/ui/helpers/errors/ui_error.dart';
 
-extension DomainErrorExtension on DomainError {
+extension UIErrorExtension on UIError {
   String get description {
     switch (this) {
-      case DomainError.invalidCredentials:
+      case UIError.invalidCredentials:
         return 'Credenciais inválidas.';
 
-      case DomainError.unexpected:
-        return 'Algo errado aconteceu. Tente novamente em breve';
+      case UIError.invalidField:
+        return 'Campo inválido.';
+
+      case UIError.requiredField:
+        return 'Campo obrigatório.';
 
       default:
-        return '';
+        return 'Algo errado aconteceu. Tente novamente em breve.';
     }
   }
 }

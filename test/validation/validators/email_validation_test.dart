@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
 
+import 'package:home_automation/presentation/enums/validation_error_enum.dart';
 import 'package:home_automation/validation/validators/validators.dart';
 
 void main() {
@@ -26,6 +27,6 @@ void main() {
   });
 
   test('should return error if email is invalid', () {
-    expect(sut.validate('ca.com'), 'Campo invávlido.');
+    expect(sut.validate('ca.com'), ValidationError.invalidField);
   });
 }

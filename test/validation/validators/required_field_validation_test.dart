@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
 
+import 'package:home_automation/presentation/enums/validation_error_enum.dart';
 import 'package:home_automation/validation/validators/validators.dart';
 
 void main() {
@@ -14,10 +15,10 @@ void main() {
   });
 
   test('should return null if value is empty', () {
-    expect(sut.validate(''), 'Campo obrigatório.');
+    expect(sut.validate(''), ValidationError.requiredField);
   });
 
   test('should return error if value is null', () {
-    expect(sut.validate(null), 'Campo obrigatório.');
+    expect(sut.validate(null), ValidationError.requiredField);
   });
 }

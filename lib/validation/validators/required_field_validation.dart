@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../presentation/enums/validation_error_enum.dart';
 import '../protocols/protocols.dart';
 
 class RequiredFieldValidation extends Equatable implements IFieldValidation {
@@ -13,5 +14,5 @@ class RequiredFieldValidation extends Equatable implements IFieldValidation {
 
   @override
   // ignore: null_aware_in_condition
-  String validate(String value) => value?.isNotEmpty == true ? null : 'Campo obrigatório.';
+  ValidationError validate(String value) => value?.isNotEmpty == true ? null : ValidationError.requiredField;
 }
