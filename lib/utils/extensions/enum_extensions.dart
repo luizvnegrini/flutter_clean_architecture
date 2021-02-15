@@ -1,19 +1,20 @@
-import 'package:home_automation/ui/helpers/errors/ui_error.dart';
+import '../../ui/helpers/errors/ui_error.dart';
+import '../../ui/helpers/i18n/resources.dart';
 
 extension UIErrorExtension on UIError {
   String get description {
     switch (this) {
       case UIError.invalidCredentials:
-        return 'Credenciais inválidas.';
+        return R.strings.msgInvalidCredentials;
 
       case UIError.invalidField:
-        return 'Campo inválido.';
+        return R.strings.msgInvalidField;
 
       case UIError.requiredField:
-        return 'Campo obrigatório.';
+        return R.strings.msgRequiredField;
 
       default:
-        return 'Algo errado aconteceu. Tente novamente em breve.';
+        return R.strings.msgUnexpectedError;
     }
   }
 }

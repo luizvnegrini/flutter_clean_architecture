@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../ui/helpers/i18n/resources.dart';
 import '../ilogin_presenter.dart';
 
 class LoginButton extends StatelessWidget {
@@ -14,7 +15,7 @@ class LoginButton extends StatelessWidget {
         builder: (context, snapshot) => RaisedButton(
               onPressed: snapshot.data == true ? presenter.auth : null,
               textColor: Colors.white,
-              child: Text('Entrar'.toUpperCase()),
+              child: Text(R.strings.enter.toUpperCase()),
             ));
   }
 }

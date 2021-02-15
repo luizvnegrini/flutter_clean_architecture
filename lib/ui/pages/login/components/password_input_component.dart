@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../ui/helpers/errors/ui_error.dart';
+import '../../../../ui/helpers/i18n/resources.dart';
 import '../../../../utils/extensions/enum_extensions.dart';
-import '../../../../utils/i18n/resources.dart';
 import '../../pages.dart';
 
 class PasswordInput extends StatelessWidget {

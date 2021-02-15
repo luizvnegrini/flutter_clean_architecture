@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:home_automation/ui/helpers/i18n/resources.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils/extensions/enum_extensions.dart';
-import '../../../utils/i18n/resources.dart';
 import '../../components/components.dart';
 import './components/components.dart';
 import 'ilogin_presenter.dart';
