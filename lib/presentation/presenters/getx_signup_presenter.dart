@@ -21,6 +21,7 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
   final _mainErrorObserver = Rx<UIError>();
   final _isFormValidObserver = RxBool();
   final _isLoadingObserver = RxBool();
+  final _navigateToObserver = RxString();
 
   @override
   Stream<UIError> get nameErrorStream => _nameErrorObserver.stream;
@@ -36,6 +37,8 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
   Stream<bool> get isFormValidStream => _isFormValidObserver.stream;
   @override
   Stream<bool> get isLoadingStream => _isLoadingObserver.stream;
+  @override
+  Stream<String> get navigateToStream => _navigateToObserver.stream;
 
   GetxSignUpPresenter({@required this.validation});
 
