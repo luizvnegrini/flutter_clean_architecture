@@ -34,7 +34,7 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
   GetxSignUpPresenter({@required this.validation});
 
   @override
-  Future<void> add() async {}
+  Future<void> signUp() async {}
 
   @override
   void validateName(String name) {
