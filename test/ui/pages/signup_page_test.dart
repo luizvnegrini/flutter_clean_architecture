@@ -1,21 +1,58 @@
 import 'dart:async';
-
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:home_automation/ui/pages/signup/signup_page.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:home_automation/ui/pages/pages.dart';
+import 'package:home_automation/ui/helpers/errors/errors.dart';
+import 'package:home_automation/ui/pages/signup/isignup_presenter.dart';
+import 'package:home_automation/ui/pages/signup/signup_page.dart';
 
-class ILoginPresenterSpy extends Mock implements ILoginPresenter {}
+class ISignUpPresenterSpy extends Mock implements ISignUpPresenter {}
 
 void main() {
+  ISignUpPresenter presenter;
+  StreamController<UIError> nameErrorController;
+  StreamController<UIError> emailErrorController;
+  StreamController<UIError> passwordErrorController;
+  StreamController<UIError> passwordConfirmationErrorController;
+
+  setUp(() {
+    presenter = ISignUpPresenterSpy();
+  });
+
+  void initStreams() {
+    nameErrorController = StreamController<UIError>();
+    emailErrorController = StreamController<UIError>();
+    passwordErrorController = StreamController<UIError>();
+    passwordConfirmationErrorController = StreamController<UIError>();
+  }
+
+  void mockStreams() {
+    when(presenter.nameErrorStream).thenAnswer((_) => nameErrorController.stream);
+    when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
+    when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
+    when(presenter.passwordConfirmationErrorStream).thenAnswer((_) => passwordConfirmationErrorController.stream);
+  }
+
+  void closeStreams() {
+    nameErrorController.close();
+    emailErrorController.close();
+    passwordErrorController.close();
+    passwordConfirmationErrorController.close();
+  }
+
+  tearDown(closeStreams);
+
   Future<void> loadPage(WidgetTester tester) async {
+    initStreams();
+    mockStreams();
+
     final signUpPage = GetMaterialApp(
       initialRoute: '/signup',
       getPages: [
-        GetPage(name: '/signup', page: () => SignUpPage()),
+        GetPage(name: '/signup', page: () => SignUpPage(presenter)),
       ],
     );
     await tester.pumpWidget(signUpPage);
@@ -47,5 +84,24 @@ void main() {
 
     final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(button.onPressed, null);
+  });
+
+  testWidgets('should call validate with correct values', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    final name = faker.person.name();
+    await tester.enterText(find.bySemanticsLabel('Nome'), name);
+    verify(presenter.validateName(name));
+
+    final email = faker.internet.email();
+    await tester.enterText(find.bySemanticsLabel('Email'), email);
+    verify(presenter.validateEmail(email));
+
+    final password = faker.internet.password();
+    await tester.enterText(find.bySemanticsLabel('Senha'), password);
+    verify(presenter.validatePassword(password));
+
+    await tester.enterText(find.bySemanticsLabel('Confirmar senha'), password);
+    verify(presenter.validatePasswordConfirmation(password));
   });
 }

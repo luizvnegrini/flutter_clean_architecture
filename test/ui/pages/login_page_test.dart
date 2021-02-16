@@ -20,8 +20,11 @@ void main() {
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
 
-  void initStreams() {
+  setUp(() {
     presenter = ILoginPresenterSpy();
+  });
+
+  void initStreams() {
     emailErrorController = StreamController<UIError>();
     passwordErrorController = StreamController<UIError>();
     mainErrorController = StreamController<UIError>();

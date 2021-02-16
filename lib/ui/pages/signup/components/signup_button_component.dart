@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../ui/helpers/i18n/resources.dart';
+import '../../../helpers/i18n/resources.dart';
 
 class SignUpButton extends StatelessWidget {
   @override
