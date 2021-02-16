@@ -5,16 +5,16 @@ extension UIErrorExtension on UIError {
   String get description {
     switch (this) {
       case UIError.invalidCredentials:
-        return R.strings.msgInvalidCredentials;
+        return R.string.msgInvalidCredentials;
 
       case UIError.invalidField:
-        return R.strings.msgInvalidField;
+        return R.string.msgInvalidField;
 
       case UIError.requiredField:
-        return R.strings.msgRequiredField;
+        return R.string.msgRequiredField;
 
       default:
-        return R.strings.msgUnexpectedError;
+        return R.string.msgUnexpectedError;
     }
   }
 }

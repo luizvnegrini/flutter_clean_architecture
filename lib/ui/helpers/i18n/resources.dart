@@ -4,16 +4,16 @@ import 'strings/strings.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class R {
-  static Translations strings = PtBr();
+  static Translations string = PtBr();
 
   static void load(Locale locale) {
     switch (locale.toString()) {
       case 'en_US':
-        strings = EnUs();
+        string = EnUs();
         break;
 
       default:
-        strings = PtBr();
+        string = PtBr();
         break;
     }
   }

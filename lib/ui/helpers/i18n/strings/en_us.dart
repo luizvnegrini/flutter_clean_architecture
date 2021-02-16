@@ -10,6 +10,14 @@ class EnUs implements Translations {
   @override
   String get enter => 'Enter';
   @override
+  String get name => 'Name';
+  @override
+  String get confirmPassword => 'Confirm password';
+  @override
+  String get login => 'Login';
+  @override
+  String get wait => 'Wait...';
+  @override
   String get msgInvalidField => 'Invalid field.';
   @override
   String get msgRequiredField => 'Required field.';
@@ -17,4 +25,6 @@ class EnUs implements Translations {
   String get msgInvalidCredentials => 'Invalid credentials.';
   @override
   String get msgUnexpectedError => 'Something went wrong. Please try again soon.';
+  @override
+  String get signUp => 'Sign up';
 }

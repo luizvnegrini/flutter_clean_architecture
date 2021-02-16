@@ -50,7 +50,7 @@ class LoginPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const LoginHeader(),
-                  const Headline1('login'),
+                  Headline1(R.string.login),
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: Provider(
@@ -67,7 +67,7 @@ class LoginPage extends StatelessWidget {
                           FlatButton.icon(
                             onPressed: () {},
                             icon: const Icon(Icons.person),
-                            label: Text(R.strings.addAccount),
+                            label: Text(R.string.addAccount),
                           )
                         ],
                       )),
