@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../ui/helpers/errors/ui_error.dart';
 import '../../../../ui/helpers/i18n/resources.dart';
 import '../../../../ui/pages/signup/signup.dart';
+import '../../../../utils/extensions/enum_extensions.dart';
 
 class NameInput extends StatelessWidget {
   @override
@@ -15,6 +16,7 @@ class NameInput extends StatelessWidget {
         builder: (context, snapshot) => TextFormField(
               decoration: InputDecoration(
                   labelText: R.string.name,
+                  errorText: snapshot.hasData ? snapshot.data.description : null,
                   icon: Icon(
                     Icons.person,
                     color: Theme.of(context).primaryColorLight,
