@@ -2,8 +2,9 @@ import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:home_automation/data/http/http.dart';
 import 'package:home_automation/domain/usecases/usecases.dart';
+import 'package:home_automation/domain/enums/enums.dart';
+import 'package:home_automation/data/http/http.dart';
 import 'package:home_automation/data/enums/enums.dart';
 import 'package:home_automation/data/usecases/usecases.dart';
 
@@ -15,13 +16,15 @@ void main() {
   RemoteAddAccount sut;
   AddAccountParams params;
 
-  Map mockValidData() => {'accessToken': faker.guid.guid(), 'name': faker.person.name()};
-
   PostExpectation mockRequest() => when(httpClient.request(
         url: anyNamed('url'),
         method: anyNamed('method'),
         body: anyNamed('body'),
       ));
+
+  void mockHttpError(HttpError error) {
+    mockRequest().thenThrow(error);
+  }
 
   setUp(() {
     httpClient = HttpClientSpy();
@@ -48,5 +51,13 @@ void main() {
         'passwordConfirmation': params.passwordConfirmation,
       },
     ));
+  });
+
+  test('should throw UnexpectedError if HttpClient returns 400', () async {
+    mockHttpError(HttpError.badRequest);
+
+    final future = sut.add(params);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }

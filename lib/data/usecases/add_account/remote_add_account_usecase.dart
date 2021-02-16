@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../../../domain/enums/enums.dart';
 import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 import './add_account.dart';
@@ -13,6 +14,12 @@ class RemoteAddAccount {
   @override
   Future<void> add(AddAccountParams params) async {
     final body = RemoteAddAccountParams.fromDomain(params).toJson();
-    await httpClient.request(url: url, method: 'post', body: body);
+
+    try {
+      await httpClient.request(url: url, method: 'post', body: body);
+    } on HttpError catch (error) {
+      // ignore: only_throw_errors
+      throw DomainError.unexpected;
+    }
   }
 }
