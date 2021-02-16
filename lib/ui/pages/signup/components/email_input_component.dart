@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../ui/helpers/errors/ui_error.dart';
 import '../../../../ui/helpers/i18n/resources.dart';
 import '../../../../ui/pages/signup/signup.dart';
+import '../../../../utils/extensions/enum_extensions.dart';
 
 class EmailInput extends StatelessWidget {
   @override
@@ -15,6 +16,7 @@ class EmailInput extends StatelessWidget {
         builder: (context, snapshot) => TextFormField(
               decoration: InputDecoration(
                 labelText: R.string.email,
+                errorText: snapshot.hasData ? snapshot.data.description : null,
                 icon: Icon(
                   Icons.email,
                   color: Theme.of(context).primaryColorLight,
