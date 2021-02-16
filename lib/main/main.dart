@@ -21,7 +21,7 @@ class App extends StatelessWidget {
       title: 'Home automation',
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
-      initialRoute: '/',
+      initialRoute: '/login',
       getPages: [
         const GetPage(name: '/', page: makeSplashScreenPage, transition: Transition.fade),
         const GetPage(name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
