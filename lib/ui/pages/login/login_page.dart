@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../utils/extensions/enum_extensions.dart';
 import '../../components/components.dart';
 import './components/components.dart';
-import 'ilogin_presenter.dart';
+import './ilogin_presenter.dart';
 
 class LoginPage extends StatelessWidget {
   final ILoginPresenter presenter;

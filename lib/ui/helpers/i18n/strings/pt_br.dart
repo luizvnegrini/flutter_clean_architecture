@@ -16,6 +16,8 @@ class PtBr implements Translations {
   @override
   String get login => 'Login';
   @override
+  String get signUp => 'Registrar';
+  @override
   String get wait => 'Aguarde...';
   @override
   String get msgInvalidField => 'Campo inválido.';
@@ -26,5 +28,5 @@ class PtBr implements Translations {
   @override
   String get msgUnexpectedError => 'Algo errado aconteceu. Tente novamente em breve.';
   @override
-  String get signUp => 'Registrar';
+  String get msgEmailInUse => 'O já esta em uso.';
 }

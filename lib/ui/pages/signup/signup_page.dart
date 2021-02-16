@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../ui/components/components.dart';
 import '../../../ui/helpers/i18n/resources.dart';
 import '../../../ui/pages/signup/signup.dart';
+import '../../../utils/extensions/enum_extensions.dart';
 
 class SignUpPage extends StatelessWidget {
   final ISignUpPresenter presenter;
@@ -26,6 +27,12 @@ class SignUpPage extends StatelessWidget {
             showLoading(context);
           } else {
             hideLoading(context);
+          }
+        });
+
+        presenter.mainErrorStream.listen((error) {
+          if (error != null) {
+            showErrorMessage(context, error.description);
           }
         });
 

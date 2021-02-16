@@ -16,6 +16,8 @@ class EnUs implements Translations {
   @override
   String get login => 'Login';
   @override
+  String get signUp => 'Sign up';
+  @override
   String get wait => 'Wait...';
   @override
   String get msgInvalidField => 'Invalid field.';
@@ -26,5 +28,5 @@ class EnUs implements Translations {
   @override
   String get msgUnexpectedError => 'Something went wrong. Please try again soon.';
   @override
-  String get signUp => 'Sign up';
+  String get msgEmailInUse => 'This email is in use.';
 }

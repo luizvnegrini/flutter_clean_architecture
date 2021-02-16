@@ -13,6 +13,9 @@ extension UIErrorExtension on UIError {
       case UIError.requiredField:
         return R.string.msgRequiredField;
 
+      case UIError.emailInUse:
+        return R.string.msgEmailInUse;
+
       default:
         return R.string.msgUnexpectedError;
     }

@@ -3,4 +3,5 @@ enum UIError {
   invalidField,
   unexpected,
   invalidCredentials,
+  emailInUse,
 }
