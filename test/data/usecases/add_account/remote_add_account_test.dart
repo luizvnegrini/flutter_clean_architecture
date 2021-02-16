@@ -101,4 +101,12 @@ void main() {
 
     expect(account.token, validData['accessToken']);
   });
+
+  test('should throw UnexpectedError if HttpClient returns 200 with invalid data', () async {
+    mockHttpData({'invalid_key': 'invalid_value'});
+
+    final future = sut.add(params);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
 }
