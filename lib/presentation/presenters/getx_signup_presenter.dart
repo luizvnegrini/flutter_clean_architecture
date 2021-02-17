@@ -14,14 +14,15 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
   String _email;
   String _password;
   String _passwordConfirmation;
+
   final _nameErrorObserver = Rx<UIError>();
   final _emailErrorObserver = Rx<UIError>();
   final _passwordErrorObserver = Rx<UIError>();
   final _passwordConfirmationErrorObserver = Rx<UIError>();
   final _mainErrorObserver = Rx<UIError>();
-  final _isFormValidObserver = RxBool();
-  final _isLoadingObserver = RxBool();
   final _navigateToObserver = RxString();
+  final _isFormValidObserver = false.obs;
+  final _isLoadingObserver = false.obs;
 
   @override
   Stream<UIError> get nameErrorStream => _nameErrorObserver.stream;

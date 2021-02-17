@@ -70,7 +70,7 @@ void main() {
     verify(validation.validate(field: 'email', value: email)).called(1);
   });
 
-  test('should emit invalidField error if email is invalid', () {
+  test('should emit invalidFieldError if email is invalid', () {
     mockValidation(value: ValidationError.invalidField);
 
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
@@ -125,7 +125,7 @@ void main() {
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut
-      ..validateEmail(password)
+      ..validateEmail(email)
       ..validatePassword(password);
   });
 
@@ -136,7 +136,7 @@ void main() {
     // ignore: unawaited_futures
     expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
-    sut.validateEmail(password);
+    sut.validateEmail(email);
     await Future.delayed(Duration.zero);
     sut.validatePassword(password);
   });
