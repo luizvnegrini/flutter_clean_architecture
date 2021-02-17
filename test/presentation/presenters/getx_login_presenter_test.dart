@@ -25,9 +25,9 @@ void main() {
   String password;
   String token;
 
-  PostExpectation mockValidationCall(String field) => when(validation.validate(field: field ?? anyNamed('field'), value: anyNamed('value')));
-
+  PostExpectation mockValidationCall(String field) => when(validation.validate(field: field ?? anyNamed('field'), input: anyNamed('input')));
   PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
+  PostExpectation mockSaveCurrentAccountCall() => when(saveCurrentAccount.save(any));
 
   void mockValidation({String field, ValidationError value}) {
     mockValidationCall(field).thenReturn(value);
@@ -40,8 +40,6 @@ void main() {
   void mockAuthenticationError(DomainError error) {
     mockAuthenticationCall().thenThrow(error);
   }
-
-  PostExpectation mockSaveCurrentAccountCall() => when(saveCurrentAccount.save(any));
 
   void mockSaveCurrentAccountError() {
     mockSaveCurrentAccountCall().thenThrow(DomainError.unexpected);
@@ -65,9 +63,14 @@ void main() {
   });
 
   test('should call validation with correct email', () {
+    final formData = {
+      'email': email,
+      'password': null,
+    };
+
     sut.validateEmail(email);
 
-    verify(validation.validate(field: 'email', value: email)).called(1);
+    verify(validation.validate(field: 'email', input: formData)).called(1);
   });
 
   test('should emit invalidFieldError if email is invalid', () {
@@ -96,9 +99,14 @@ void main() {
   });
 
   test('should call validation with correct password', () {
+    final formData = {
+      'email': null,
+      'password': password,
+    };
+
     sut.validatePassword(password);
 
-    verify(validation.validate(field: 'password', value: password)).called(1);
+    verify(validation.validate(field: 'password', input: formData)).called(1);
   });
 
   test('should emit requiredFieldError if password is empty', () {
@@ -167,6 +175,8 @@ void main() {
       ..validatePassword(password);
 
     // ignore: unawaited_futures
+    expectLater(sut.mainErrorStream, emits(null));
+    // ignore: unawaited_futures
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
 
     await sut.auth();
@@ -191,7 +201,8 @@ void main() {
 
     // ignore: unawaited_futures
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidCredentials)));
+    // ignore: unawaited_futures
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.invalidCredentials]));
 
     await sut.auth();
   });
@@ -204,7 +215,8 @@ void main() {
 
     // ignore: unawaited_futures
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, UIError.unexpected)));
+    // ignore: unawaited_futures
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
 
     await sut.auth();
   });
@@ -217,7 +229,8 @@ void main() {
 
     // ignore: unawaited_futures
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, UIError.unexpected)));
+    // ignore: unawaited_futures
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
 
     await sut.auth();
   });
@@ -229,5 +242,12 @@ void main() {
     sut.validateEmail(email);
     await Future.delayed(Duration.zero);
     sut.validatePassword(password);
+  });
+
+  test('should go to signUp page on link click', () async {
+    // ignore: unawaited_futures
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/signup')));
+
+    sut.goToSignUp();
   });
 }

@@ -6,8 +6,8 @@ import '../../../builders/validation_builder.dart';
 IValidation makeSignUpValidation() => ValidationComposite(makeSignUpValidations());
 
 List<IFieldValidation> makeSignUpValidations() => [
-      ...ValidationBuilder.field('name').required().build(),
+      ...ValidationBuilder.field('name').required().min(10).build(),
       ...ValidationBuilder.field('email').required().email().build(),
-      ...ValidationBuilder.field('password').required().build(),
-      ...ValidationBuilder.field('passwordConfirmation').required().build(),
+      ...ValidationBuilder.field('password').required().min(3).build(),
+      ...ValidationBuilder.field('passwordConfirmation').required().sameAs('password').build(),
     ];

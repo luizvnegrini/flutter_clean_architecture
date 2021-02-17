@@ -14,5 +14,5 @@ class RequiredFieldValidation extends Equatable implements IFieldValidation {
 
   @override
   // ignore: null_aware_in_condition
-  ValidationError validate(String value) => value?.isNotEmpty == true ? null : ValidationError.requiredField;
+  ValidationError validate(Map input) => input[field]?.isNotEmpty == true ? null : ValidationError.requiredField;
 }

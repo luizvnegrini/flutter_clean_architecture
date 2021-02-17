@@ -13,10 +13,10 @@ class EmailValidation extends Equatable implements IFieldValidation {
   const EmailValidation(this.field);
 
   @override
-  ValidationError validate(String value) {
+  ValidationError validate(Map input) {
     final regex = RegExp(
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
-    final isValid = value?.isNotEmpty != true || regex.hasMatch(value);
+    final isValid = input[field]?.isNotEmpty != true || regex.hasMatch(input[field]);
 
     return isValid ? null : ValidationError.invalidField;
   }

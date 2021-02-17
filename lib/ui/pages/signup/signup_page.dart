@@ -47,6 +47,7 @@ class SignUpPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const LoginHeader(),
                 Headline1(R.string.signUp),
                 Padding(
                   padding: const EdgeInsets.all(20),
@@ -67,7 +68,7 @@ class SignUpPage extends StatelessWidget {
                         ),
                         SignUpButton(),
                         FlatButton.icon(
-                          onPressed: () {},
+                          onPressed: presenter.goToLogin,
                           icon: const Icon(Icons.login),
                           label: Text(R.string.login),
                         )

@@ -24,5 +24,17 @@ class ValidationBuilder {
     return this;
   }
 
+  // ignore: avoid_returning_this
+  ValidationBuilder min(int minLength) {
+    validations.add(MinLengthValidation(field: fieldName, minLength: minLength));
+    return this;
+  }
+
+  // ignore: avoid_returning_this
+  ValidationBuilder sameAs(String fieldToCompare) {
+    validations.add(CompareFieldsValidation(field: fieldName, fieldToCompare: fieldToCompare));
+    return this;
+  }
+
   List<IFieldValidation> build() => validations;
 }

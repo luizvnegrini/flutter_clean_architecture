@@ -36,11 +36,17 @@ class GetxLoginPresenter extends GetxController implements ILoginPresenter {
   @override
   Stream<bool> get isLoadingStream => _isLoadingObserver.stream;
 
-  GetxLoginPresenter({@required this.validation, @required this.authentication, @required this.saveCurrentAccount});
+  GetxLoginPresenter({
+    @required this.validation,
+    @required this.authentication,
+    @required this.saveCurrentAccount,
+  });
 
   @override
   Future<void> auth() async {
     try {
+      _mainErrorObserver.value = null;
+
       _isLoadingObserver.value = true;
       final account = await authentication.auth(AuthenticationParams(email: _email, secret: _password));
       await saveCurrentAccount.save(account);
@@ -67,19 +73,24 @@ class GetxLoginPresenter extends GetxController implements ILoginPresenter {
   @override
   void validateEmail(String email) {
     _email = email;
-    _emailErrorObserver.value = _validateField(field: 'email', value: email);
+    _emailErrorObserver.value = _validateField('email');
     _validateForm();
   }
 
   @override
   void validatePassword(String password) {
     _password = password;
-    _passwordErrorObserver.value = _validateField(field: 'password', value: password);
+    _passwordErrorObserver.value = _validateField('password');
     _validateForm();
   }
 
-  UIError _validateField({String field, String value}) {
-    final error = validation.validate(field: field, value: value);
+  UIError _validateField(String field) {
+    final formData = {
+      'email': _email,
+      'password': _password,
+    };
+
+    final error = validation.validate(field: field, input: formData);
 
     switch (error) {
       case ValidationError.invalidField:
@@ -100,5 +111,7 @@ class GetxLoginPresenter extends GetxController implements ILoginPresenter {
   }
 
   @override
-  void dispose();
+  void goToSignUp() {
+    _navigateToObserver.value = '/signup';
+  }
 }

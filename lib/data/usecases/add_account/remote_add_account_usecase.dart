@@ -1,6 +1,6 @@
-import 'package:home_automation/data/models/remote_account_model.dart';
 import 'package:meta/meta.dart';
 
+import '../../../data/models/models.dart';
 import '../../../domain/entities/entities.dart';
 import '../../../domain/enums/enums.dart';
 import '../../../domain/usecases/usecases.dart';

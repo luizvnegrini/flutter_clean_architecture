@@ -7,5 +7,5 @@ IValidation makeLoginValidation() => ValidationComposite(makeLoginValidations())
 
 List<IFieldValidation> makeLoginValidations() => [
       ...ValidationBuilder.field('email').required().email().build(),
-      ...ValidationBuilder.field('password').required().build(),
+      ...ValidationBuilder.field('password').required().min(3).build(),
     ];

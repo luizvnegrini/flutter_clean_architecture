@@ -5,13 +5,17 @@ import 'package:home_automation/validation/validators/validators.dart';
 
 void main() {
   test('should return the correct validations', () {
-    final validations = makeLoginValidations();
+    final validations = makeSignUpValidations();
 
     expect(validations, [
+      const RequiredFieldValidation('name'),
+      const MinLengthValidation(field: 'name', minLength: 10),
       const RequiredFieldValidation('email'),
       const EmailValidation('email'),
       const RequiredFieldValidation('password'),
-      const MinLengthValidation(field: 'password', minLength: 3)
+      const MinLengthValidation(field: 'password', minLength: 3),
+      const RequiredFieldValidation('passwordConfirmation'),
+      const CompareFieldsValidation(field: 'passwordConfirmation', fieldToCompare: 'password')
     ]);
   });
 }
