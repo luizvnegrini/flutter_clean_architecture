@@ -136,3 +136,4 @@ pubspec.lock
 *.g.dart
 lib/flavors/config/env.dart
 node_modules
+.husky/*
