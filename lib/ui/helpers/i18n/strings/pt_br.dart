@@ -16,7 +16,7 @@ class PtBr implements Translations {
   @override
   String get login => 'Login';
   @override
-  String get signUp => 'Registrar';
+  String get signUp => 'Registrar.';
   @override
   String get wait => 'Aguarde...';
   @override
