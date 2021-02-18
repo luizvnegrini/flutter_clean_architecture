@@ -150,9 +150,6 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
   }
 
   @override
-  void dispose();
-
-  @override
   void goToLogin() {
     _navigateToObserver.value = '/login';
   }
