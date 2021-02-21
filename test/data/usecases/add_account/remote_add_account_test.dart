@@ -8,7 +8,7 @@ import 'package:home_automation/data/http/http.dart';
 import 'package:home_automation/data/enums/enums.dart';
 import 'package:home_automation/data/usecases/usecases.dart';
 
-class HttpClientSpy extends Mock implements IHttpClient {}
+class HttpClientSpy extends Mock implements IHttpClient<Map> {}
 
 void main() {
   HttpClientSpy httpClient;

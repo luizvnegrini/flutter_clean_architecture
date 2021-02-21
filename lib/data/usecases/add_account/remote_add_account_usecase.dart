@@ -8,7 +8,7 @@ import '../../http/http.dart';
 import './add_account.dart';
 
 class RemoteAddAccount implements IAddAccount {
-  final IHttpClient httpClient;
+  final IHttpClient<Map> httpClient;
   final String url;
 
   RemoteAddAccount({@required this.httpClient, @required this.url});
