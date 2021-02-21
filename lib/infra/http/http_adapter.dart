@@ -24,7 +24,9 @@ class HttpAdapter implements IHttpClient {
     var response = Response('', 500);
 
     try {
-      if (method == 'post') response = await client.post(url, headers: headers, body: jsonBody);
+      if (method == 'post') {
+        response = await client.post(url, headers: headers, body: jsonBody);
+      } else if (method == 'get') response = await client.get(url, headers: headers);
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
       // ignore: only_throw_errors
