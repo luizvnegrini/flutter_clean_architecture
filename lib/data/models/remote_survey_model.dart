@@ -1,5 +1,7 @@
-import 'package:home_automation/domain/entities/entities.dart';
 import 'package:meta/meta.dart';
+
+import '../../data/enums/enums.dart';
+import '../../domain/entities/entities.dart';
 
 class RemoteSurveyModel {
   final String id;
@@ -14,12 +16,17 @@ class RemoteSurveyModel {
     @required this.didAnswer,
   });
 
-  factory RemoteSurveyModel.fromJson(Map json) => RemoteSurveyModel(
-        id: json['id'],
-        question: json['question'],
-        date: json['date'],
-        didAnswer: json['didAnswer'],
-      );
+  factory RemoteSurveyModel.fromJson(Map json) {
+    // ignore: only_throw_errors
+    if (!json.keys.toSet().containsAll(['id', 'question', 'date', 'didAnswer'])) throw HttpError.invalidData;
+
+    return RemoteSurveyModel(
+      id: json['id'],
+      question: json['question'],
+      date: json['date'],
+      didAnswer: json['didAnswer'],
+    );
+  }
 
   SurveyEntity toEntity() => SurveyEntity(
         id: id,
