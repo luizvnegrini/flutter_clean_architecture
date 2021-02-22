@@ -22,6 +22,8 @@ class EnUs implements Translations {
   @override
   String get surveys => 'Surveys';
   @override
+  String get reload => 'Reload';
+  @override
   String get msgInvalidField => 'Invalid field.';
   @override
   String get msgRequiredField => 'Required field.';

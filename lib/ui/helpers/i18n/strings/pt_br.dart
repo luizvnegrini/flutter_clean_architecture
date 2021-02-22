@@ -22,6 +22,8 @@ class PtBr implements Translations {
   @override
   String get surveys => 'Enquetes';
   @override
+  String get reload => 'Recarregar';
+  @override
   String get msgInvalidField => 'Campo inválido.';
   @override
   String get msgRequiredField => 'Campo obrigatório.';
