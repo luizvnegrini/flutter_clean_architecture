@@ -13,74 +13,71 @@ class SurveysPage extends StatelessWidget {
   const SurveysPage(this.presenter);
 
   @override
-  Widget build(BuildContext context) {
-    presenter.loadData();
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(R.string.surveys),
+        ),
+        body: Builder(
+          builder: (context) {
+            presenter.isLoadingStream.listen((isLoading) {
+              if (isLoading == true) {
+                showLoading(context);
+              } else {
+                hideLoading(context);
+              }
+            });
+            presenter.loadData();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(R.string.surveys),
-      ),
-      body: Builder(
-        builder: (context) {
-          presenter.isLoadingStream.listen((isLoading) {
-            if (isLoading == true) {
-              showLoading(context);
-            } else {
-              hideLoading(context);
-            }
-          });
-
-          return StreamBuilder<List<SurveyViewModel>>(
-            stream: presenter.surveysStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.all(40),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        snapshot.error,
-                        style: const TextStyle(fontSize: 16),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      RaisedButton(
-                        onPressed: presenter.loadData,
-                        child: Text(
-                          R.string.reload,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
+            return StreamBuilder<List<SurveyViewModel>>(
+              stream: presenter.surveysStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Padding(
+                    padding: const EdgeInsets.all(40),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          snapshot.error,
+                          style: const TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
                         ),
-                      )
-                    ],
-                  ),
-                );
-              }
-
-              if (snapshot.hasData) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: CarouselSlider(
-                    items: snapshot.data.map((viewModel) => SurveyItem(viewModel)).toList(),
-                    options: CarouselOptions(
-                      enlargeCenterPage: true,
-                      aspectRatio: 1,
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        RaisedButton(
+                          onPressed: presenter.loadData,
+                          child: Text(
+                            R.string.reload,
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  ),
-                );
-              }
+                  );
+                }
 
-              return const SizedBox(height: 0);
-            },
-          );
-        },
-      ),
-    );
-  }
+                if (snapshot.hasData) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: CarouselSlider(
+                      items: snapshot.data.map((viewModel) => SurveyItem(viewModel)).toList(),
+                      options: CarouselOptions(
+                        enlargeCenterPage: true,
+                        aspectRatio: 1,
+                      ),
+                    ),
+                  );
+                }
+
+                return const SizedBox(height: 0);
+              },
+            );
+          },
+        ),
+      );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
