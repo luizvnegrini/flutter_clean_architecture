@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/route_manager.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:home_automation/ui/helpers/i18n/i18n.dart';
 import 'package:home_automation/ui/helpers/errors/errors.dart';
 import 'package:home_automation/ui/pages/pages.dart';
 import 'package:home_automation/ui/pages/surveys/surveys.dart';
@@ -105,5 +106,15 @@ void main() {
     expect(find.text('Question 2'), findsWidgets);
     expect(find.text('Date 1'), findsWidgets);
     expect(find.text('Date 2'), findsWidgets);
+  });
+
+  testWidgets('should call LoadSurveys on reload button click', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    loadSurveysController.addError(UIError.unexpected.description);
+    await tester.pump();
+    await tester.tap(find.text(R.string.reload));
+
+    verify(presenter.loadData()).called(2);
   });
 }
