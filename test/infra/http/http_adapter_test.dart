@@ -244,5 +244,13 @@ void main() {
 
       expect(future, throwsA(HttpError.notFound));
     });
+
+    test('should return InternalServerError if get returns 500', () async {
+      mockResponse(500);
+
+      final future = sut.request(url: url, method: 'get');
+
+      expect(future, throwsA(HttpError.internalServerError));
+    });
   });
 }
