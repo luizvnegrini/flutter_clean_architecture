@@ -334,7 +334,7 @@ void main() {
       ..validatePasswordConfirmation(passwordConfirmation);
 
     // ignore: unawaited_futures
-    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/home')));
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
 
     await sut.signUp();
   });

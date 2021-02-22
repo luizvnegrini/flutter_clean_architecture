@@ -20,6 +20,8 @@ class PtBr implements Translations {
   @override
   String get wait => 'Aguarde...';
   @override
+  String get surveys => 'Enquetes';
+  @override
   String get msgInvalidField => 'Campo inválido.';
   @override
   String get msgRequiredField => 'Campo obrigatório.';
@@ -28,5 +30,5 @@ class PtBr implements Translations {
   @override
   String get msgUnexpectedError => 'Algo errado aconteceu. Tente novamente em breve.';
   @override
-  String get msgEmailInUse => 'O já esta em uso.';
+  String get msgEmailInUse => 'O email já esta em uso.';
 }

@@ -15,7 +15,7 @@ class SplashScreenPage extends StatelessWidget {
     presenter.checkAccount();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Home automation')),
+      appBar: AppBar(title: const Text('Splash screen')),
       body: Builder(
         builder: (context) {
           presenter.navigateToStream.listen((page) {

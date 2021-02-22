@@ -7,7 +7,7 @@ import 'package:home_automation/data/http/http.dart';
 import 'package:home_automation/domain/enums/enums.dart';
 import 'package:home_automation/domain/entities/entities.dart';
 
-class HttpClientSpy extends Mock implements IHttpClient<List<Map>> {}
+class HttpClientSpy extends Mock implements IHttpClient {}
 
 void main() {
   RemoteLoadSurveys sut;

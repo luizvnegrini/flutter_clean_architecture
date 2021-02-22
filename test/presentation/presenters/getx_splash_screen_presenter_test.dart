@@ -36,7 +36,7 @@ void main() {
   });
 
   test('should go to home page on sucess', () async {
-    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/home')));
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
 
     await sut.checkAccount(durationInSeconds: 0);
   });

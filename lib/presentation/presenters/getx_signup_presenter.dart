@@ -66,7 +66,7 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
 
       await saveCurrentAccount.save(account);
 
-      _navigateToObserver.value = '/home';
+      _navigateToObserver.value = '/surveys';
     } on DomainError catch (error) {
       switch (error) {
         case DomainError.emailInUse:

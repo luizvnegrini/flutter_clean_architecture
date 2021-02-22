@@ -11,7 +11,7 @@ class HttpAdapter implements IHttpClient {
   HttpAdapter(this.client);
 
   @override
-  Future<Map> request({
+  Future<dynamic> request({
     @required String url,
     @required String method,
     Map body,

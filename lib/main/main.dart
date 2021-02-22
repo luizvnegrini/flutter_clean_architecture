@@ -21,12 +21,12 @@ class App extends StatelessWidget {
       title: 'Home automation',
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
-      initialRoute: '/signup',
-      getPages: [
-        const GetPage(name: '/', page: makeSplashScreenPage, transition: Transition.fade),
-        const GetPage(name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
-        const GetPage(name: '/signup', page: makeSignUpPage),
-        GetPage(name: '/home', page: () => const Scaffold(body: Text('home')), transition: Transition.fadeIn),
+      initialRoute: '/',
+      getPages: const [
+        GetPage(name: '/', page: makeSplashScreenPage, transition: Transition.fade),
+        GetPage(name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
+        GetPage(name: '/signup', page: makeSignUpPage),
+        GetPage(name: '/surveys', page: makeSurveysPage),
       ],
     );
   }

@@ -20,6 +20,8 @@ class EnUs implements Translations {
   @override
   String get wait => 'Wait...';
   @override
+  String get surveys => 'Surveys';
+  @override
   String get msgInvalidField => 'Invalid field.';
   @override
   String get msgRequiredField => 'Required field.';

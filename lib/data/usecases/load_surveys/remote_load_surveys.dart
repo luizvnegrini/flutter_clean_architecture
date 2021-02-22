@@ -8,7 +8,7 @@ import '../../../domain/usecases/usecases.dart';
 
 class RemoteLoadSurveys implements ILoadSurveys {
   final String url;
-  final IHttpClient<List<Map>> httpClient;
+  final IHttpClient httpClient;
 
   RemoteLoadSurveys({@required this.url, @required this.httpClient});
 

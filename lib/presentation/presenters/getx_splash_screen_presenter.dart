@@ -20,7 +20,7 @@ class GetxSplashScreenPresenter implements ISplashScreenPresenter {
     try {
       final account = await loadCurrentAccount.load();
 
-      _navigateToObserver.value = account?.token == null ? '/login' : '/home';
+      _navigateToObserver.value = account?.token == null ? '/login' : '/surveys';
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
       _navigateToObserver.value = '/login';
