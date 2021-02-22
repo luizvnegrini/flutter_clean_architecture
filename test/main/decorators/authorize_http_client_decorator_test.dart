@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 
 import 'package:home_automation/data/cache/cache.dart';
 
-class AuthorizeHttpClientDecorator {
+class AuthorizeHttpClientDecorator implements IHttpClient {
   final IFetchSecureCacheStorage fetchSecureCacheStorage;
   final IHttpClient decoratee;
 
@@ -15,7 +15,8 @@ class AuthorizeHttpClientDecorator {
     @required this.decoratee,
   });
 
-  Future<void> request({
+  @override
+  Future<dynamic> request({
     @required String url,
     @required String method,
     Map body,
@@ -25,7 +26,8 @@ class AuthorizeHttpClientDecorator {
 
     final authorizeHeaders = headers ?? {}
       ..addAll({'x-access-token': token});
-    await decoratee.request(url: url, method: method, body: body, headers: authorizeHeaders);
+    // ignore: unnecessary_await_in_return
+    return await decoratee.request(url: url, method: method, body: body, headers: authorizeHeaders);
   }
 }
 
@@ -41,10 +43,21 @@ void main() {
   String method;
   Map body;
   String token;
+  String httpResponse;
 
   void mockToken() {
     token = faker.guid.guid();
     when(fetchSecureCacheStorage.fetchSecure(any)).thenAnswer((_) async => token);
+  }
+
+  void mockHttpResponse() {
+    httpResponse = faker.randomGenerator.string(50);
+    when(httpClient.request(
+      url: anyNamed('url'),
+      method: anyNamed('method'),
+      body: anyNamed('body'),
+      headers: anyNamed('headers'),
+    )).thenAnswer((_) async => httpResponse);
   }
 
   setUp(() {
@@ -59,6 +72,7 @@ void main() {
     body = {'any_key': 'any_value'};
 
     mockToken();
+    mockHttpResponse();
   });
 
   test('should call FetchSecureCacheStorage with correct key', () async {
@@ -86,5 +100,11 @@ void main() {
         'any_header': 'any_value',
       },
     )).called(1);
+  });
+
+  test('should return same result as decoratee', () async {
+    final response = await sut.request(url: url, method: method, body: body);
+
+    expect(response, httpResponse);
   });
 }
