@@ -166,33 +166,24 @@ void main() {
     verify(presenter.auth()).called(1);
   });
 
-  testWidgets('should present loading', (WidgetTester tester) async {
+  testWidgets('should handle loading correctly', (WidgetTester tester) async {
     await loadPage(tester);
 
     isLoadingController.add(true);
     await tester.pump();
-
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-  });
 
-  testWidgets('should hide loading', (WidgetTester tester) async {
-    await loadPage(tester);
-
-    isLoadingController.add(true);
-    await tester.pump();
     isLoadingController.add(false);
     await tester.pump();
-
     expect(find.byType(CircularProgressIndicator), findsNothing);
-  });
 
-  testWidgets('should present error message if authentication fails', (WidgetTester tester) async {
-    await loadPage(tester);
-
-    mainErrorController.add(UIError.invalidCredentials);
+    isLoadingController.add(true);
     await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-    expect(find.text('Credenciais inválidas.'), findsOneWidget);
+    isLoadingController.add(null);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
   testWidgets('should present error message if authentication throws', (WidgetTester tester) async {
