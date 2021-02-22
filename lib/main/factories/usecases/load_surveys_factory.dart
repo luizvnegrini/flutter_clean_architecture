@@ -4,6 +4,6 @@ import '../../../domain/usecases/usecases.dart';
 import '../http/http.dart';
 
 ILoadSurveys makeRemoteLoadSurveys() => RemoteLoadSurveys(
-      httpClient: makeHttpAdapter(),
+      httpClient: makeAuthorizeHttpClientDecorator(),
       url: makeApiUrl('surveys'),
     );
