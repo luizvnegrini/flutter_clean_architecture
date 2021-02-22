@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'package:meta/meta.dart';
 
 import '../../../data/http/http.dart';
@@ -16,8 +17,7 @@ class RemoteLoadSurveys implements ILoadSurveys {
   Future<List<SurveyEntity>> load() async {
     try {
       final response = await httpClient.request(url: url, method: 'get');
-
-      return response.map((json) => RemoteSurveyModel.fromJson(json).toEntity()).toList();
+      return response.map<SurveyEntity>((json) => RemoteSurveyModel.fromJson(json).toEntity()).toList();
     } on HttpError catch (error) {
       // ignore: only_throw_errors
       throw error == HttpError.forbidden ? DomainError.accessDenied : DomainError.unexpected;
