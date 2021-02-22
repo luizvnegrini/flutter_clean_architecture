@@ -27,8 +27,9 @@ class AuthorizeHttpClientDecorator implements IHttpClient {
 
       final authorizeHeaders = headers ?? {}
         ..addAll({'x-access-token': token});
-      // ignore: unnecessary_await_in_return
       return await decoratee.request(url: url, method: method, body: body, headers: authorizeHeaders);
+    } on HttpError {
+      rethrow;
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
       // ignore: only_throw_errors
@@ -52,6 +53,12 @@ void main() {
   String httpResponse;
 
   PostExpectation mockTokenCall() => when(fetchSecureCacheStorage.fetchSecure(any));
+  PostExpectation mockHttpResponseCall() => when(httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body'),
+        headers: anyNamed('headers'),
+      ));
 
   void mockToken() {
     token = faker.guid.guid();
@@ -62,14 +69,13 @@ void main() {
     mockTokenCall().thenThrow(Exception());
   }
 
+  void mockHttpResponseError(HttpError error) {
+    mockHttpResponseCall().thenThrow(error);
+  }
+
   void mockHttpResponse() {
     httpResponse = faker.randomGenerator.string(50);
-    when(httpClient.request(
-      url: anyNamed('url'),
-      method: anyNamed('method'),
-      body: anyNamed('body'),
-      headers: anyNamed('headers'),
-    )).thenAnswer((_) async => httpResponse);
+    mockHttpResponseCall().thenAnswer((_) async => httpResponse);
   }
 
   setUp(() {
@@ -126,5 +132,13 @@ void main() {
     final future = sut.request(url: url, method: method, body: body);
 
     expect(future, throwsA(HttpError.forbidden));
+  });
+
+  test('should rethrow if decoratee throws', () async {
+    mockHttpResponseError(HttpError.badRequest);
+
+    final future = sut.request(url: url, method: method, body: body);
+
+    expect(future, throwsA(HttpError.badRequest));
   });
 }
