@@ -8,17 +8,20 @@ import '../../domain/usecases/usecases.dart';
 import '../../ui/pages/surveys/surveys.dart';
 import '../../utils/extensions/enum_extensions.dart';
 
-class GetxSurveysPresenter {
+class GetxSurveysPresenter implements ISurveysPresenter {
   final ILoadSurveys loadSurveys;
 
   final _isLoadingObserver = true.obs;
   final _surveys = Rx<List<SurveyViewModel>>();
 
+  @override
   Stream<bool> get isLoadingStream => _isLoadingObserver.stream;
+  @override
   Stream<List<SurveyViewModel>> get surveysStream => _surveys.stream;
 
   GetxSurveysPresenter({@required this.loadSurveys});
 
+  @override
   Future<void> loadData() async {
     try {
       _isLoadingObserver.value = true;
