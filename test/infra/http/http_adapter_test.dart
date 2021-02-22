@@ -4,7 +4,6 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'package:home_automation/data/http/http.dart';
-
 import 'package:home_automation/infra/http/http.dart';
 
 class ClientSpy extends Mock implements Client {}
