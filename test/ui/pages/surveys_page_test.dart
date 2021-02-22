@@ -24,7 +24,7 @@ void main() {
 
   void mockStreams() {
     when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
-    when(presenter.loadSurveysStream).thenAnswer((_) => loadSurveysController.stream);
+    when(presenter.surveysStream).thenAnswer((_) => loadSurveysController.stream);
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -42,8 +42,8 @@ void main() {
   }
 
   List<SurveyViewModel> makeSurveys() => [
-        SurveyViewModel(id: '1', question: 'Question 1', date: 'Date 1', didAnswer: true),
-        SurveyViewModel(id: '2', question: 'Question 2', date: 'Date 2', didAnswer: false),
+        const SurveyViewModel(id: '1', question: 'Question 1', date: 'Date 1', didAnswer: true),
+        const SurveyViewModel(id: '2', question: 'Question 2', date: 'Date 2', didAnswer: false),
       ];
 
   setUp(() {
@@ -83,7 +83,7 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('should present error if loadSurveysStream fails', (WidgetTester tester) async {
+  testWidgets('should present error if surveysStream fails', (WidgetTester tester) async {
     await loadPage(tester);
 
     loadSurveysController.addError(UIError.unexpected.description);
@@ -94,7 +94,7 @@ void main() {
     expect(find.text('Question 1'), findsNothing);
   });
 
-  testWidgets('should present list if loadSurveysStream succeeds', (WidgetTester tester) async {
+  testWidgets('should present list if surveysStream succeeds', (WidgetTester tester) async {
     await loadPage(tester);
 
     loadSurveysController.add(makeSurveys());
