@@ -1,7 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../ui/pages/surveys/surveys.dart';
+
 class SurveyItem extends StatelessWidget {
-  const SurveyItem({Key key}) : super(key: key);
+  final SurveyViewModel viewModel;
+
+  const SurveyItem(this.viewModel);
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -22,8 +27,8 @@ class SurveyItem extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 '22 Fev 2021',
                 style: TextStyle(
                   color: Colors.white,
@@ -31,10 +36,10 @@ class SurveyItem extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
-                'Qual é seu framework favorito',
-                style: TextStyle(
+                viewModel.question,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                 ),
@@ -43,4 +48,9 @@ class SurveyItem extends StatelessWidget {
           ),
         ),
       );
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<SurveyViewModel>('viewModel', viewModel));
+  }
 }
