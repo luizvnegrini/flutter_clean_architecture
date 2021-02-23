@@ -38,7 +38,7 @@ void main() {
   }
 
   void mockAddAccount() {
-    mockAddAccountCall().thenReturn((_) async => AccountEntity(token));
+    mockAddAccountCall().thenAnswer((_) async => AccountEntity(token));
   }
 
   void mockSaveCurrentAccountError() {
