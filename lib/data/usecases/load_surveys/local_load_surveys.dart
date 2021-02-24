@@ -7,14 +7,14 @@ import '../../../domain/enums/enums.dart';
 import '../../../domain/usecases/usecases.dart';
 
 class LocalLoadSurveys implements ILoadSurveys {
-  final IFetchCacheStorage fetchCacheStorage;
+  final ICacheStorage cacheStorage;
 
-  LocalLoadSurveys({@required this.fetchCacheStorage});
+  LocalLoadSurveys({@required this.cacheStorage});
 
   @override
   Future<List<SurveyEntity>> load() async {
     try {
-      final data = await fetchCacheStorage.fetch('surveys');
+      final data = await cacheStorage.fetch('surveys');
 
       // ignore: only_throw_errors
       if (data?.isEmpty != false) throw Exception();
