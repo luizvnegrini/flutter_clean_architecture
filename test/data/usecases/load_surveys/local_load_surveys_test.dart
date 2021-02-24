@@ -1,37 +1,13 @@
 import 'package:faker/faker.dart';
-import 'package:home_automation/data/models/models.dart';
-import 'package:home_automation/domain/entities/survey_entity.dart';
-import 'package:home_automation/domain/enums/enums.dart';
+import 'package:home_automation/data/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
-import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
-class LocalLoadSurveys {
-  final IFetchCacheStorage fetchCacheStorage;
-
-  LocalLoadSurveys({@required this.fetchCacheStorage});
-
-  Future<List<SurveyEntity>> load() async {
-    try {
-      final data = await fetchCacheStorage.fetch('surveys');
-
-      // ignore: only_throw_errors
-      if (data?.isEmpty != false) throw Exception();
-
-      return data.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
-      // ignore: avoid_catches_without_on_clauses
-    } catch (error) {
-      // ignore: only_throw_errors
-      throw DomainError.unexpected;
-    }
-  }
-}
+import 'package:home_automation/data/cache/cache.dart';
+import 'package:home_automation/domain/entities/entities.dart';
+import 'package:home_automation/domain/enums/enums.dart';
 
 class FetchCacheStorageSpy extends Mock implements IFetchCacheStorage {}
-
-abstract class IFetchCacheStorage {
-  Future<dynamic> fetch(String key);
-}
 
 void main() {
   FetchCacheStorageSpy fetchCacheStorage;
