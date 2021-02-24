@@ -209,16 +209,20 @@ void main() {
     LocalLoadSurveys sut;
     List<SurveyEntity> surveys;
 
+    PostExpectation mockSaveCall() => when(cacheStorage.save(key: anyNamed('key'), value: anyNamed('value')));
+
+    void mockSaveError() => mockSaveCall().thenThrow(Exception());
+
     List<SurveyEntity> mockSurveys() => [
           SurveyEntity(
             id: faker.guid.guid(),
-            question: faker.randomGenerator.string(10),
+            question: faker.lorem.sentence(),
             dateTime: DateTime.utc(2020, 2, 2),
             didAnswer: true,
           ),
           SurveyEntity(
             id: faker.guid.guid(),
-            question: faker.randomGenerator.string(10),
+            question: faker.lorem.sentence(),
             dateTime: DateTime.utc(2018, 12, 20),
             didAnswer: false,
           ),
@@ -233,7 +237,7 @@ void main() {
       surveys = mockSurveys();
     });
 
-    test('should call cacheStorage with correct key', () async {
+    test('should call cacheStorage with correct values', () async {
       final list = [
         {
           'id': surveys[0].id,
@@ -251,6 +255,14 @@ void main() {
       await sut.save(surveys);
 
       verify(cacheStorage.save(key: 'surveys', value: list)).called(1);
+    });
+
+    test('should throw UnexpectedError if save throws', () async {
+      mockSaveError();
+
+      final future = sut.save(surveys);
+
+      expect(future, throwsA(DomainError.unexpected));
     });
   });
 }
