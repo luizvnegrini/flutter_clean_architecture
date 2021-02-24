@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:home_automation/data/models/models.dart';
 import 'package:home_automation/domain/entities/survey_entity.dart';
+import 'package:home_automation/domain/enums/enums.dart';
 import 'package:mockito/mockito.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
@@ -12,6 +13,9 @@ class LocalLoadSurveys {
 
   Future<List<SurveyEntity>> load() async {
     final data = await fetchCacheStorage.fetch('surveys');
+
+    // ignore: only_throw_errors
+    if (data.isEmpty) throw DomainError.unexpected;
 
     return data.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
   }
@@ -80,5 +84,13 @@ void main() {
         didAnswer: true,
       ),
     ]);
+  });
+
+  test('should throw UnexpectedError if cache is empty', () async {
+    mockFetch([]);
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
