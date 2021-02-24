@@ -28,9 +28,8 @@ class LocalLoadSurveys implements ILoadSurveys {
   }
 
   Future<void> validate() async {
-    final data = await cacheStorage.fetch('surveys');
-
     try {
+      final data = await cacheStorage.fetch('surveys');
       _getMappedEntities(data);
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
