@@ -1,3 +1,4 @@
+import 'package:home_automation/data/enums/enums.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/entities/entities.dart';
@@ -18,7 +19,7 @@ class LocalSurveyModel {
   // ignore: prefer_expression_function_bodies
   factory LocalSurveyModel.fromJson(Map json) {
     // ignore: only_throw_errors
-    // if (!json.keys.toSet().containsAll(['id', 'question', 'date', 'didAnswer'])) throw HttpError.invalidData;
+    if (!json.keys.toSet().containsAll(['id', 'question', 'date', 'didAnswer'])) throw HttpError.invalidData;
 
     return LocalSurveyModel(
       id: json['id'],
