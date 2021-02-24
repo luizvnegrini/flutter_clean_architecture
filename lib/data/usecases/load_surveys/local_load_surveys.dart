@@ -19,7 +19,7 @@ class LocalLoadSurveys implements ILoadSurveys {
       // ignore: only_throw_errors
       if (data?.isEmpty != false) throw Exception();
 
-      return data.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
+      return _getMappedEntities(data);
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
       // ignore: only_throw_errors
@@ -31,10 +31,13 @@ class LocalLoadSurveys implements ILoadSurveys {
     final data = await cacheStorage.fetch('surveys');
 
     try {
-      data.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
+      _getMappedEntities(data);
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
       await cacheStorage.delete('surveys');
     }
   }
+
+  List<SurveyEntity> _getMappedEntities(List<Map> mappedList) =>
+      mappedList.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
 }
