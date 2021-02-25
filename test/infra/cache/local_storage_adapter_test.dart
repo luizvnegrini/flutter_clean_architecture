@@ -1,5 +1,4 @@
 import 'package:faker/faker.dart';
-import 'package:flutter/rendering.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:localstorage/localstorage.dart';
