@@ -1,12 +1,13 @@
 import 'package:faker/faker.dart';
 import 'package:home_automation/domain/entities/survey_entity.dart';
+import 'package:home_automation/domain/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:meta/meta.dart';
 
 import 'package:home_automation/data/usecases/usecases.dart';
 
-class RemoteLoadSurveysWithLocalFallback {
+class RemoteLoadSurveysWithLocalFallback implements ILoadSurveys {
   final RemoteLoadSurveys remote;
   final LocalLoadSurveys local;
 
@@ -15,9 +16,12 @@ class RemoteLoadSurveysWithLocalFallback {
     @required this.local,
   });
 
-  Future<void> load() async {
+  @override
+  Future<List<SurveyEntity>> load() async {
     final surveys = await remote.load();
     await local.save(surveys);
+
+    return surveys;
   }
 }
 
@@ -29,7 +33,7 @@ void main() {
   RemoteLoadSurveysSpy remote;
   LocalLoadSurveysSpy local;
   RemoteLoadSurveysWithLocalFallback sut;
-  List<SurveyEntity> surveys;
+  List<SurveyEntity> remoteSurveys;
 
   List<SurveyEntity> mockSurveys() => [
         SurveyEntity(
@@ -40,9 +44,9 @@ void main() {
       ];
 
   void mockRemoteLoad() {
-    surveys = mockSurveys();
+    remoteSurveys = mockSurveys();
 
-    when(remote.load()).thenAnswer((_) async => surveys);
+    when(remote.load()).thenAnswer((_) async => remoteSurveys);
   }
 
   setUp(() {
@@ -65,6 +69,12 @@ void main() {
   test('should call local save with remote data', () async {
     await sut.load();
 
-    verify(local.save(surveys)).called(1);
+    verify(local.save(remoteSurveys)).called(1);
+  });
+
+  test('should return remote data', () async {
+    final surveys = await sut.load();
+
+    expect(surveys, remoteSurveys);
   });
 }
