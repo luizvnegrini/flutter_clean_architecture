@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:flutter/rendering.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:localstorage/localstorage.dart';
@@ -15,7 +16,6 @@ void main() {
 
   void mockDeleteError() => when(localStorage.deleteItem(any)).thenThrow(Exception());
   void mockSaveError() => when(localStorage.setItem(any, any)).thenThrow(Exception());
-
   setUp(() {
     key = faker.randomGenerator.string(5);
     value = faker.randomGenerator.string(50);
@@ -65,10 +65,22 @@ void main() {
   });
 
   group('fetch', () {
+    String result;
+
+    void mockFetch() => when(localStorage.getItem(any)).thenAnswer((_) => result);
+
+    setUp(mockFetch);
+
     test('should call LocalStorage with correct values', () async {
       await sut.fetch(key);
 
       verify(localStorage.getItem(key)).called(1);
+    });
+
+    test('should return same value as localStorage', () async {
+      final data = await sut.fetch(key);
+
+      expect(data, result);
     });
   });
 }
