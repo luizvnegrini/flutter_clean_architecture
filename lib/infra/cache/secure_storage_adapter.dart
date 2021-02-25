@@ -3,10 +3,10 @@ import 'package:meta/meta.dart';
 
 import '../../data/cache/cache.dart';
 
-class LocalStorageAdapter implements ISaveSecureCacheStorage, IFetchSecureCacheStorage {
+class SecureStorageAdapter implements ISaveSecureCacheStorage, IFetchSecureCacheStorage {
   final FlutterSecureStorage secureStorage;
 
-  LocalStorageAdapter({@required this.secureStorage});
+  SecureStorageAdapter({@required this.secureStorage});
 
   @override
   Future<void> saveSecure({@required String key, @required String value}) async {
