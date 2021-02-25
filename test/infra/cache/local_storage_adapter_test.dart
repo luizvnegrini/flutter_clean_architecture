@@ -11,6 +11,7 @@ class LocalStorageAdapter {
 
   // ignore: avoid_annotating_with_dynamic
   Future<void> save({@required String key, @required dynamic value}) async {
+    await localStorage.deleteItem(key);
     await localStorage.setItem(key, value);
   }
 }
@@ -18,14 +19,22 @@ class LocalStorageAdapter {
 class LocalStorageSpy extends Mock implements LocalStorage {}
 
 void main() {
-  test('should call LocalStorage with correct values', () async {
-    final key = faker.randomGenerator.string(5);
-    final value = faker.randomGenerator.string(50);
-    final localStorage = LocalStorageSpy();
-    final sut = LocalStorageAdapter(localStorage: localStorage);
+  LocalStorageSpy localStorage;
+  LocalStorageAdapter sut;
+  String key;
+  dynamic value;
 
+  setUp(() {
+    key = faker.randomGenerator.string(5);
+    value = faker.randomGenerator.string(50);
+    localStorage = LocalStorageSpy();
+    sut = LocalStorageAdapter(localStorage: localStorage);
+  });
+
+  test('should call LocalStorage with correct values', () async {
     await sut.save(key: key, value: value);
 
+    verify(localStorage.deleteItem(key)).called(1);
     verify(localStorage.setItem(key, value)).called(1);
   });
 }
