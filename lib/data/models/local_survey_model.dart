@@ -47,7 +47,7 @@ class LocalSurveyModel {
   Map<String, String> toJson() => {
         'id': id,
         'question': question,
-        'dateTime': date.toIso8601String(),
+        'date': date.toIso8601String(),
         'didAnswer': didAnswer.toString(),
       };
 }
