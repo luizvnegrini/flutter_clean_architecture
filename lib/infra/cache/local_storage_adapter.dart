@@ -21,7 +21,5 @@ class LocalStorageAdapter implements ICacheStorage {
   }
 
   @override
-  Future<dynamic> fetch(String key) async {
-    await localStorage.getItem(key);
-  }
+  Future<dynamic> fetch(String key) async => await localStorage.getItem(key);
 }

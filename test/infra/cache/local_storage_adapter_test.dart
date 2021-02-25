@@ -68,7 +68,11 @@ void main() {
 
     PostExpectation mockFetchCall() => when(localStorage.getItem(any));
 
-    void mockFetch() => mockFetchCall().thenAnswer((_) => result);
+    void mockFetch() {
+      result = faker.randomGenerator.string(50);
+      mockFetchCall().thenAnswer((_) => result);
+    }
+
     void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
     setUp(mockFetch);

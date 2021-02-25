@@ -27,8 +27,8 @@ class HttpAdapter implements IHttpClient {
 
     try {
       if (method == 'post') {
-        response = await client.post(url, headers: defaultHeaders, body: jsonBody);
-      } else if (method == 'get') response = await client.get(url, headers: defaultHeaders);
+        response = await client.post(url, headers: defaultHeaders, body: jsonBody).timeout(const Duration(seconds: 5));
+      } else if (method == 'get') response = await client.get(url, headers: defaultHeaders).timeout(const Duration(seconds: 5));
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
       // ignore: only_throw_errors
