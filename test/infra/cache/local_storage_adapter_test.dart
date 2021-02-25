@@ -50,7 +50,7 @@ void main() {
 
   group('delete', () {
     test('should call LocalStorage with correct values', () async {
-      await sut.delete(key: key);
+      await sut.delete(key);
 
       verify(localStorage.deleteItem(key)).called(1);
     });
@@ -58,9 +58,17 @@ void main() {
     test('should throw if deleteItem throws', () async {
       mockDeleteError();
 
-      final future = sut.delete(key: key);
+      final future = sut.delete(key);
 
       expect(future, throwsA(const TypeMatcher<Exception>()));
+    });
+  });
+
+  group('fetch', () {
+    test('should call LocalStorage with correct values', () async {
+      await sut.fetch(key);
+
+      verify(localStorage.getItem(key)).called(1);
     });
   });
 }
