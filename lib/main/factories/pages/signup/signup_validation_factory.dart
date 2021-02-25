@@ -1,6 +1,6 @@
+import '../../../../main/composites/composites.dart';
 import '../../../../presentation/protocols/ivalidation.dart';
 import '../../../../validation/protocols/ifield_validation.dart';
-import '../../../../validation/validators/validators.dart';
 import '../../../builders/validation_builder.dart';
 
 IValidation makeSignUpValidation() => ValidationComposite(makeSignUpValidations());

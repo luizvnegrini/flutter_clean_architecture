@@ -1,7 +1,7 @@
 import 'package:mockito/mockito.dart';
 
+import 'package:home_automation/main/composites/composites.dart';
 import 'package:home_automation/presentation/enums/validation_error_enum.dart';
-import 'package:home_automation/validation/validators/validators.dart';
 import 'package:home_automation/validation/protocols/protocols.dart';
 
 import 'package:test/test.dart';
