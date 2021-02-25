@@ -1,20 +1,9 @@
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:meta/meta.dart';
 import 'package:localstorage/localstorage.dart';
 
-class LocalStorageAdapter {
-  final LocalStorage localStorage;
-
-  LocalStorageAdapter({@required this.localStorage});
-
-  // ignore: avoid_annotating_with_dynamic
-  Future<void> save({@required String key, @required dynamic value}) async {
-    await localStorage.deleteItem(key);
-    await localStorage.setItem(key, value);
-  }
-}
+import 'package:home_automation/infra/cache/cache.dart';
 
 class LocalStorageSpy extends Mock implements LocalStorage {}
 
@@ -49,7 +38,7 @@ void main() {
     expect(future, throwsA(const TypeMatcher<Exception>()));
   });
 
-  test('should throw if deleteItem throws', () async {
+  test('should throw if setItem throws', () async {
     mockSetItemError();
 
     final future = sut.save(key: key, value: value);
