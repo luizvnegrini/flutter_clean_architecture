@@ -24,6 +24,8 @@ void main() {
   String key;
   dynamic value;
 
+  void mockDeleteItemError() => when(localStorage.deleteItem(any)).thenThrow(Exception());
+
   setUp(() {
     key = faker.randomGenerator.string(5);
     value = faker.randomGenerator.string(50);
@@ -36,5 +38,13 @@ void main() {
 
     verify(localStorage.deleteItem(key)).called(1);
     verify(localStorage.setItem(key, value)).called(1);
+  });
+
+  test('should throw if deleteItem throws', () async {
+    mockDeleteItemError();
+
+    final future = sut.save(key: key, value: value);
+
+    expect(future, throwsA(const TypeMatcher<Exception>()));
   });
 }
