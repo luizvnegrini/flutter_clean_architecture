@@ -20,6 +20,7 @@ dependencies:
   intl:
 
 dev_dependencies:
+  image_test_utils:
   flutter_launcher_icons:
   test:
   mockito:
