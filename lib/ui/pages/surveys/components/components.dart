@@ -1,1 +1,1 @@
-export './survey_item.dart';
+export 'survey_item_component.dart';

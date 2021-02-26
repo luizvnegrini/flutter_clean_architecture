@@ -1,10 +1,9 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:home_automation/ui/components/components.dart';
 
+import '../../../ui/components/components.dart';
 import '../../../ui/helpers/i18n/i18n.dart';
-import '../../../ui/pages/surveys/components/components.dart';
+import '../../../ui/pages/surveys/components/survey_items_component.dart';
 import '../../../ui/pages/surveys/surveys.dart';
 
 class SurveysPage extends StatelessWidget {
@@ -32,45 +31,13 @@ class SurveysPage extends StatelessWidget {
               stream: presenter.surveysStream,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Padding(
-                    padding: const EdgeInsets.all(40),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          snapshot.error,
-                          style: const TextStyle(fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        RaisedButton(
-                          onPressed: presenter.loadData,
-                          child: Text(
-                            R.string.reload,
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                  return ReloadScreen(
+                    error: snapshot.error,
+                    reload: presenter.loadData,
                   );
                 }
 
-                if (snapshot.hasData) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: CarouselSlider(
-                      items: snapshot.data.map((viewModel) => SurveyItem(viewModel)).toList(),
-                      options: CarouselOptions(
-                        enlargeCenterPage: true,
-                        aspectRatio: 1,
-                      ),
-                    ),
-                  );
-                }
+                if (snapshot.hasData) return SurveyItems(snapshot.data);
 
                 return const SizedBox(height: 0);
               },
