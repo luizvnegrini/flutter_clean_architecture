@@ -6,7 +6,10 @@ ThemeData makeAppTheme() {
   const primaryColor = Color.fromRGBO(255, 122, 9, 1);
   const primaryColorDark = Color.fromRGBO(213, 0, 0, 1);
   const primaryColorLight = Color.fromRGBO(253, 154, 40, 1);
+  const secondaryColor = Color.fromRGBO(0, 77, 64, 1);
   const secondaryColorDark = Color.fromRGBO(0, 37, 26, 1);
+  final disabledColor = Colors.grey.shade400;
+  final dividerColor = Colors.grey;
 
   final buttonTheme = ButtonThemeData(
       colorScheme: const ColorScheme.light(primary: primaryColor),
@@ -49,6 +52,7 @@ ThemeData makeAppTheme() {
     primaryColor: primaryColor,
     primaryColorDark: primaryColorDark,
     primaryColorLight: primaryColorLight,
+    highlightColor: secondaryColor,
     secondaryHeaderColor: secondaryColorDark,
     fontFamily: 'Montserrat',
     accentColor: primaryColor,
@@ -58,5 +62,7 @@ ThemeData makeAppTheme() {
     appBarTheme: appBarTheme,
     inputDecorationTheme: inputDecorationTheme,
     buttonTheme: buttonTheme,
+    disabledColor: disabledColor,
+    dividerColor: dividerColor,
   );
 }
