@@ -2,10 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/route_manager.dart';
-import 'package:home_automation/ui/helpers/errors/errors.dart';
 import 'package:image_test_utils/image_test_utils.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:home_automation/ui/helpers/errors/errors.dart';
+import 'package:home_automation/ui/helpers/i18n/i18n.dart';
 import 'package:home_automation/ui/pages/pages.dart';
 import 'package:home_automation/utils/extensions/enum_extensions.dart';
 
@@ -86,5 +87,15 @@ void main() {
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
     expect(find.text('Recarregar'), findsOneWidget);
+  });
+
+  testWidgets('should call LoadSurveys on reload button click', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    surveyResultController.addError(UIError.unexpected.description);
+    await tester.pump();
+    await tester.tap(find.text(R.string.reload));
+
+    verify(presenter.loadData()).called(2);
   });
 }
