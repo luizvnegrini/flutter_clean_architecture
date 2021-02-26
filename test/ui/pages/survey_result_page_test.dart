@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/route_manager.dart';
 import 'package:home_automation/ui/helpers/errors/errors.dart';
-import 'package:home_automation/ui/pages/surveys/survey_viewmodel.dart';
 import 'package:image_test_utils/image_test_utils.dart';
 import 'package:mockito/mockito.dart';
 
