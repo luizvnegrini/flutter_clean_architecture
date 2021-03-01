@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:home_automation/domain/enums/enums.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -32,15 +33,25 @@ void main() {
   String surveyId;
   SurveyResultEntity surveyResult;
 
-  void mockSurveyResult() {
-    surveyResult = SurveyResultEntity(surveyId: faker.guid.guid(), question: faker.lorem.sentence(), answers: [
-      SurveyAnswerEntity(
-        answer: faker.lorem.sentence(),
-        isCurrentAnswer: faker.randomGenerator.boolean(),
-        percent: faker.randomGenerator.integer(100),
-      ),
-    ]);
-    when(remote.loadBySurvey(surveyId: anyNamed('surveyId'))).thenAnswer((_) async => surveyResult);
+  PostExpectation mockRemoteLoadCall() => when(remote.loadBySurvey(surveyId: anyNamed('surveyId')));
+
+  SurveyResultEntity mockSurveyResult() => SurveyResultEntity(
+        surveyId: faker.guid.guid(),
+        question: faker.lorem.sentence(),
+        answers: [
+          SurveyAnswerEntity(
+            answer: faker.lorem.sentence(),
+            isCurrentAnswer: faker.randomGenerator.boolean(),
+            percent: faker.randomGenerator.integer(100),
+          )
+        ],
+      );
+
+  void mockRemoteLoadError(DomainError error) => mockRemoteLoadCall().thenThrow(error);
+
+  void mockRemoteLoad() {
+    surveyResult = mockSurveyResult();
+    mockRemoteLoadCall().thenAnswer((_) async => surveyResult);
   }
 
   setUp(() {
@@ -53,6 +64,7 @@ void main() {
     surveyId = faker.guid.guid();
 
     mockSurveyResult();
+    mockRemoteLoad();
   });
 
   test('should call remote LoadBySurvey', () async {
@@ -71,5 +83,13 @@ void main() {
     final response = await sut.loadBySurvey(surveyId: surveyId);
 
     expect(response, surveyResult);
+  });
+
+  test('should rethrow if remote LoadBySurvey throws AccessDeniedError', () async {
+    mockRemoteLoadError(DomainError.accessDenied);
+
+    final future = sut.loadBySurvey(surveyId: surveyId);
+
+    expect(future, throwsA(DomainError.accessDenied));
   });
 }
