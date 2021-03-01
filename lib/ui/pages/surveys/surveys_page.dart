@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:provider/provider.dart';
 
 import '../../../ui/components/components.dart';
 import '../../../ui/helpers/i18n/i18n.dart';
@@ -25,6 +27,11 @@ class SurveysPage extends StatelessWidget {
                 hideLoading(context);
               }
             });
+
+            presenter.navigateToStream.listen((page) {
+              if (page?.isNotEmpty == true) Get.toNamed(page);
+            });
+
             presenter.loadData();
 
             return StreamBuilder<List<SurveyViewModel>>(
@@ -37,7 +44,12 @@ class SurveysPage extends StatelessWidget {
                   );
                 }
 
-                if (snapshot.hasData) return SurveyItems(snapshot.data);
+                if (snapshot.hasData) {
+                  return Provider(
+                    create: (_) => presenter,
+                    child: SurveyItems(snapshot.data),
+                  );
+                }
 
                 return const SizedBox(height: 0);
               },

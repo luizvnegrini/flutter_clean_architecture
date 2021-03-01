@@ -75,4 +75,11 @@ void main() {
 
     await sut.loadData();
   });
+
+  test('should go to SurveyResultPage on survey click', () async {
+    // ignore: unawaited_futures
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/survey_result/any_id')));
+
+    sut.goToSurveyResult('any_id');
+  });
 }

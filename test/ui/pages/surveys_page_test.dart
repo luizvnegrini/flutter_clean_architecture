@@ -15,16 +15,19 @@ class SurveysPresenterSpy extends Mock implements ISurveysPresenter {}
 void main() {
   SurveysPresenterSpy presenter;
   StreamController<bool> isLoadingController;
+  StreamController<String> navigateToController;
   StreamController<List<SurveyViewModel>> loadSurveysController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
     loadSurveysController = StreamController<List<SurveyViewModel>>();
+    navigateToController = StreamController<String>();
   }
 
   void mockStreams() {
     when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
     when(presenter.surveysStream).thenAnswer((_) => loadSurveysController.stream);
+    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -35,6 +38,7 @@ void main() {
       initialRoute: '/surveys',
       getPages: [
         GetPage(name: '/surveys', page: () => SurveysPage(presenter)),
+        GetPage(name: '/any_route', page: () => const Scaffold(body: Text('fake page'))),
       ],
     );
 
@@ -53,6 +57,7 @@ void main() {
   void closeStream() {
     isLoadingController.close();
     loadSurveysController.close();
+    navigateToController.close();
   }
 
   tearDown(closeStream);
@@ -116,5 +121,27 @@ void main() {
     await tester.tap(find.text(R.string.reload));
 
     verify(presenter.loadData()).called(2);
+  });
+
+  testWidgets('should call goToSurveyResult on survey click', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    loadSurveysController.add(makeSurveys());
+    await tester.pump();
+
+    await tester.tap(find.text('Question 1'));
+    await tester.pump();
+
+    verify(presenter.goToSurveyResult('1')).called(1);
+  });
+
+  testWidgets('should change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('/any_route');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/any_route');
+    expect(find.text('fake page'), findsOneWidget);
   });
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../surveys.dart';
 
@@ -9,7 +10,12 @@ class SurveyItem extends StatelessWidget {
   const SurveyItem(this.viewModel);
 
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(BuildContext context) {
+    final presenter = Provider.of<ISurveysPresenter>(context);
+
+    return GestureDetector(
+      onTap: () => presenter.goToSurveyResult(viewModel.id),
+      child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5),
         child: Container(
           padding: const EdgeInsets.all(20),
@@ -47,7 +53,10 @@ class SurveyItem extends StatelessWidget {
             ],
           ),
         ),
-      );
+      ),
+    );
+  }
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
