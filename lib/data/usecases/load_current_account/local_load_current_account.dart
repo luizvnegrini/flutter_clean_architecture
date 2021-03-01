@@ -13,7 +13,7 @@ class LocalLoadCurrentAccount implements ILoadCurrentAccount {
   @override
   Future<AccountEntity> load() async {
     try {
-      final token = await fetchSecureCacheStorage.fetchSecure('token');
+      final token = await fetchSecureCacheStorage.fetch('token');
       return AccountEntity(token);
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {

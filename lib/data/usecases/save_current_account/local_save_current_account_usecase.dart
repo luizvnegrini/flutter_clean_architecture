@@ -13,7 +13,7 @@ class LocalSaveCurrentAccountUsecase implements ISaveCurrentAccount {
   @override
   Future<void> save(AccountEntity account) async {
     try {
-      await saveSecureCacheStorage.saveSecure(key: 'token', value: account.token);
+      await saveSecureCacheStorage.save(key: 'token', value: account.token);
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
       // ignore: only_throw_errors

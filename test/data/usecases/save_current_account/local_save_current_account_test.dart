@@ -15,7 +15,7 @@ void main() {
   AccountEntity account;
 
   void mockError() {
-    when(saveSecureCacheStorage.saveSecure(key: anyNamed('key'), value: anyNamed('value'))).thenThrow(Exception());
+    when(saveSecureCacheStorage.save(key: anyNamed('key'), value: anyNamed('value'))).thenThrow(Exception());
   }
 
   setUp(() {
@@ -27,7 +27,7 @@ void main() {
   test('should call SaveSecureCacheStorage with correct values', () async {
     await sut.save(account);
 
-    verify(saveSecureCacheStorage.saveSecure(key: 'token', value: account.token));
+    verify(saveSecureCacheStorage.save(key: 'token', value: account.token));
   });
 
   test('should throw UnexpectedError if SaveSecureCacheStorage trhows', () async {
