@@ -27,10 +27,10 @@ class AuthorizeHttpClientDecorator implements IHttpClient {
       final authorizeHeaders = headers ?? {}
         ..addAll({'x-access-token': token});
       return await decoratee.request(url: url, method: method, body: body, headers: authorizeHeaders);
-    } on HttpError {
-      rethrow;
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
+      if (error is HttpError && error != HttpError.forbidden) rethrow;
+
       await deleteSecureCacheStorage.deleteSecure('token');
       // ignore: only_throw_errors
       throw HttpError.forbidden;
