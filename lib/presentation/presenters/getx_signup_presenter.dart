@@ -1,5 +1,5 @@
 import 'package:get/state_manager.dart';
-import 'package:home_automation/presentation/mixins/form_validation_manager.dart';
+import 'package:home_automation/presentation/mixins/form_manager.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/enums/enums.dart';
@@ -11,9 +11,7 @@ import '../../ui/pages/signup/signup.dart';
 
 import '../protocols/protocols.dart';
 
-class GetxSignUpPresenter extends GetxController
-    with FormValidationManager, MainErrorManager, NavigationManager, LoadingManager
-    implements ISignUpPresenter {
+class GetxSignUpPresenter extends GetxController with FormManager, UIErrorManager, NavigationManager, LoadingManager implements ISignUpPresenter {
   final IValidation validation;
   final IAddAccount addAccount;
   final ISaveCurrentAccount saveCurrentAccount;

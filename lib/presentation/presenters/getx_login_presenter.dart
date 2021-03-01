@@ -1,5 +1,5 @@
 import 'package:get/state_manager.dart';
-import 'package:home_automation/presentation/mixins/form_validation_manager.dart';
+import 'package:home_automation/presentation/mixins/form_manager.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/enums/enums.dart';
@@ -10,9 +10,7 @@ import '../../ui/helpers/errors/ui_error.dart';
 import '../../ui/pages/pages.dart';
 import '../protocols/protocols.dart';
 
-class GetxLoginPresenter extends GetxController
-    with FormValidationManager, MainErrorManager, NavigationManager, LoadingManager
-    implements ILoginPresenter {
+class GetxLoginPresenter extends GetxController with FormManager, UIErrorManager, NavigationManager, LoadingManager implements ILoginPresenter {
   final IValidation validation;
   final IAuthentication authentication;
   final ISaveCurrentAccount saveCurrentAccount;
