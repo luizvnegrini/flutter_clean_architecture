@@ -1,34 +1,11 @@
 import 'package:faker/faker.dart';
-import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:home_automation/main/composites/composites.dart';
 import 'package:home_automation/domain/enums/enums.dart';
 import 'package:home_automation/domain/entities/entities.dart';
-import 'package:home_automation/domain/usecases/usecases.dart';
 import 'package:home_automation/data/usecases/usecases.dart';
-
-class RemoteLoadSurveyResultWithLocalFallback implements ILoadSurveyResult {
-  final RemoteLoadSurveyResult remote;
-  final LocalLoadSurveyResult local;
-
-  RemoteLoadSurveyResultWithLocalFallback({@required this.remote, @required this.local});
-
-  @override
-  Future<SurveyResultEntity> loadBySurvey({String surveyId}) async {
-    try {
-      final surveyResult = await remote.loadBySurvey(surveyId: surveyId);
-      await local.save(surveyId: surveyId, surveyResult: surveyResult);
-      return surveyResult;
-      // ignore: avoid_catches_without_on_clauses
-    } catch (error) {
-      if (error == DomainError.accessDenied) rethrow;
-
-      await local.validate(surveyId);
-      return local.loadBySurvey(surveyId: surveyId);
-    }
-  }
-}
 
 class RemoteLoadSurveyResultSpy extends Mock implements RemoteLoadSurveyResult {}
 
