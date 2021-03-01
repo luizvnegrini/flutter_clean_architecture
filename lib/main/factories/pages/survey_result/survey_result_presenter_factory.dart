@@ -3,6 +3,6 @@ import '../../../../presentation/presenters/presenters.dart';
 import '../../../../ui/pages/pages.dart';
 
 ISurveyResultPresenter makeGetxSurveyResultPresenter(String surveyId) => GetxSurveyResultPresenter(
-      loadSurveyResult: makeRemoteLoadSurveyResult(surveyId),
+      loadSurveyResult: makeRemoteLoadSurveyResultWithLocalFallback(surveyId),
       surveyId: surveyId,
     );
