@@ -8,7 +8,7 @@ import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/survey_result/survey_result.dart';
 import '../../utils/extensions/enum_extensions.dart';
 
-class GetxSurveyResultPresenter with SessionManager, LoadingManager implements ISurveyResultPresenter {
+class GetxSurveyResultPresenter extends GetxController with SessionManager, LoadingManager implements ISurveyResultPresenter {
   final ILoadSurveyResult loadSurveyResult;
   final String surveyId;
 

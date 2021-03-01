@@ -9,7 +9,7 @@ import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/surveys/surveys.dart';
 import '../../utils/extensions/enum_extensions.dart';
 
-class GetxSurveysPresenter with NavigationManager, SessionManager, LoadingManager implements ISurveysPresenter {
+class GetxSurveysPresenter extends GetxController with NavigationManager, SessionManager, LoadingManager implements ISurveysPresenter {
   final ILoadSurveys loadSurveys;
 
   final _surveys = Rx<List<SurveyViewModel>>();

@@ -1,10 +1,11 @@
+import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/usecases/usecases.dart';
 import '../../presentation/mixins/mixins.dart';
 import '../../ui/pages/pages.dart';
 
-class GetxSplashScreenPresenter with NavigationManager implements ISplashScreenPresenter {
+class GetxSplashScreenPresenter extends GetxController with NavigationManager implements ISplashScreenPresenter {
   final ILoadCurrentAccount loadCurrentAccount;
 
   GetxSplashScreenPresenter({@required this.loadCurrentAccount});
