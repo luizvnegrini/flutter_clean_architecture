@@ -1,20 +1,23 @@
 import 'package:faker/faker.dart';
-import 'package:home_automation/domain/entities/entities.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:home_automation/domain/entities/entities.dart';
+import 'package:home_automation/domain/usecases/usecases.dart';
 import 'package:home_automation/data/usecases/usecases.dart';
 
-class RemoteLoadSurveyResultWithLocalFallback {
+class RemoteLoadSurveyResultWithLocalFallback implements ILoadSurveyResult {
   final RemoteLoadSurveyResult remote;
   final LocalLoadSurveyResult local;
 
   RemoteLoadSurveyResultWithLocalFallback({@required this.remote, @required this.local});
 
-  Future<void> loadBySurvey({String surveyId}) async {
+  @override
+  Future<SurveyResultEntity> loadBySurvey({String surveyId}) async {
     final surveyResult = await remote.loadBySurvey(surveyId: surveyId);
     await local.save(surveyId: surveyId, surveyResult: surveyResult);
+    return surveyResult;
   }
 }
 
@@ -62,5 +65,11 @@ void main() {
     await sut.loadBySurvey(surveyId: surveyId);
 
     verify(local.save(surveyId: surveyId, surveyResult: surveyResult)).called(1);
+  });
+
+  test('should call local save with remote data', () async {
+    final response = await sut.loadBySurvey(surveyId: surveyId);
+
+    expect(response, surveyResult);
   });
 }
