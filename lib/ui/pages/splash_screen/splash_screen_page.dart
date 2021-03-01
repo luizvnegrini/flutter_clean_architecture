@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
+import '../../../ui/mixins/mixins.dart';
 import './isplash_screen_presenter.dart';
 
-class SplashScreenPage extends StatelessWidget {
+class SplashScreenPage extends StatelessWidget with NavigationManager {
   final ISplashScreenPresenter presenter;
 
   const SplashScreenPage({@required this.presenter});
@@ -18,9 +18,7 @@ class SplashScreenPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Splash screen')),
       body: Builder(
         builder: (context) {
-          presenter.navigateToStream.listen((page) {
-            if (page?.isNotEmpty == true) Get.offAllNamed(page);
-          });
+          handleNavigation(presenter.navigateToStream, clear: true);
 
           return const Center(
             child: CircularProgressIndicator(),
