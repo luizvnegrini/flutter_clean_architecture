@@ -1,15 +1,19 @@
 import 'package:get/state_manager.dart';
+import 'package:home_automation/presentation/mixins/form_validation_manager.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/enums/enums.dart';
 import '../../domain/usecases/usecases.dart';
 import '../../presentation/enums/enums.dart';
+import '../../presentation/mixins/mixins.dart';
 import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/signup/signup.dart';
 
 import '../protocols/protocols.dart';
 
-class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
+class GetxSignUpPresenter extends GetxController
+    with FormValidationManager, MainErrorManager, NavigationManager, LoadingManager
+    implements ISignUpPresenter {
   final IValidation validation;
   final IAddAccount addAccount;
   final ISaveCurrentAccount saveCurrentAccount;
@@ -23,10 +27,6 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
   final _emailErrorObserver = Rx<UIError>();
   final _passwordErrorObserver = Rx<UIError>();
   final _passwordConfirmationErrorObserver = Rx<UIError>();
-  final _mainErrorObserver = Rx<UIError>();
-  final _navigateToObserver = RxString();
-  final _isFormValidObserver = false.obs;
-  final _isLoadingObserver = false.obs;
 
   @override
   Stream<UIError> get nameErrorStream => _nameErrorObserver.stream;
@@ -36,14 +36,6 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
   Stream<UIError> get passwordErrorStream => _passwordErrorObserver.stream;
   @override
   Stream<UIError> get passwordConfirmationErrorStream => _passwordConfirmationErrorObserver.stream;
-  @override
-  Stream<UIError> get mainErrorStream => _mainErrorObserver.stream;
-  @override
-  Stream<bool> get isFormValidStream => _isFormValidObserver.stream;
-  @override
-  Stream<bool> get isLoadingStream => _isLoadingObserver.stream;
-  @override
-  Stream<String> get navigateToStream => _navigateToObserver.stream;
 
   GetxSignUpPresenter({
     @required this.validation,
@@ -54,9 +46,9 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
   @override
   Future<void> signUp() async {
     try {
-      _mainErrorObserver.value = null;
+      mainError = null;
 
-      _isLoadingObserver.value = true;
+      isLoading = true;
       final account = await addAccount.add(AddAccountParams(
         name: _name,
         email: _email,
@@ -66,23 +58,23 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
 
       await saveCurrentAccount.save(account);
 
-      _navigateToObserver.value = '/surveys';
+      navigateTo = '/surveys';
     } on DomainError catch (error) {
       switch (error) {
         case DomainError.emailInUse:
-          _mainErrorObserver.value = UIError.emailInUse;
+          mainError = UIError.emailInUse;
           break;
 
         case DomainError.unexpected:
-          _mainErrorObserver.value = UIError.unexpected;
+          mainError = UIError.unexpected;
           break;
 
         default:
-          _mainErrorObserver.value = UIError.unexpected;
+          mainError = UIError.unexpected;
           break;
       }
     } finally {
-      _isLoadingObserver.value = false;
+      isLoading = false;
     }
   }
 
@@ -139,7 +131,7 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
   }
 
   void _validateForm() {
-    _isFormValidObserver.value = _nameErrorObserver.value == null &&
+    isFormValid = _nameErrorObserver.value == null &&
         _emailErrorObserver.value == null &&
         _passwordErrorObserver.value == null &&
         _passwordConfirmationErrorObserver.value == null &&
@@ -151,6 +143,6 @@ class GetxSignUpPresenter extends GetxController implements ISignUpPresenter {
 
   @override
   void goToLogin() {
-    _navigateToObserver.value = '/login';
+    navigateTo = '/login';
   }
 }

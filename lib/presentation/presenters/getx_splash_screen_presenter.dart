@@ -1,17 +1,13 @@
 import 'package:meta/meta.dart';
-import 'package:get/get.dart';
 
 import '../../domain/usecases/usecases.dart';
+import '../../presentation/mixins/mixins.dart';
 import '../../ui/pages/pages.dart';
 
-class GetxSplashScreenPresenter implements ISplashScreenPresenter {
+class GetxSplashScreenPresenter with NavigationManager implements ISplashScreenPresenter {
   final ILoadCurrentAccount loadCurrentAccount;
-  final _navigateToObserver = RxString();
 
   GetxSplashScreenPresenter({@required this.loadCurrentAccount});
-
-  @override
-  Stream<String> get navigateToStream => _navigateToObserver.stream;
 
   @override
   Future<void> checkAccount({int durationInSeconds = 2}) async {
@@ -20,10 +16,10 @@ class GetxSplashScreenPresenter implements ISplashScreenPresenter {
     try {
       final account = await loadCurrentAccount.load();
 
-      _navigateToObserver.value = account?.token == null ? '/login' : '/surveys';
+      navigateTo = account?.token == null ? '/login' : '/surveys';
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
-      _navigateToObserver.value = '/login';
+      navigateTo = '/login';
     }
   }
 }

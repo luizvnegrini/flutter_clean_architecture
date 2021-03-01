@@ -3,22 +3,17 @@ import 'package:meta/meta.dart';
 
 import '../../domain/enums/enums.dart';
 import '../../domain/usecases/usecases.dart';
+import '../../presentation/mixins/mixins.dart';
 import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/survey_result/survey_result.dart';
 import '../../utils/extensions/enum_extensions.dart';
 
-class GetxSurveyResultPresenter implements ISurveyResultPresenter {
+class GetxSurveyResultPresenter with SessionManager, LoadingManager implements ISurveyResultPresenter {
   final ILoadSurveyResult loadSurveyResult;
   final String surveyId;
 
-  final _isLoadingObserver = true.obs;
-  final _isSessionExpired = RxBool();
   final _surveyResult = Rx<SurveyResultViewModel>();
 
-  @override
-  Stream<bool> get isLoadingStream => _isLoadingObserver.stream;
-  @override
-  Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
   @override
   Stream<SurveyResultViewModel> get surveyResultStream => _surveyResult.stream;
 
@@ -30,7 +25,7 @@ class GetxSurveyResultPresenter implements ISurveyResultPresenter {
   @override
   Future<void> loadData() async {
     try {
-      _isLoadingObserver.value = true;
+      isLoading = true;
       final surveyResult = await loadSurveyResult.loadBySurvey(surveyId: surveyId);
       _surveyResult.value = SurveyResultViewModel(
         surveyId: surveyResult.surveyId,
@@ -46,12 +41,12 @@ class GetxSurveyResultPresenter implements ISurveyResultPresenter {
       );
     } on DomainError catch (error) {
       if (error == DomainError.accessDenied) {
-        _isSessionExpired.value = true;
+        isSessionExpired = true;
       } else {
         _surveyResult.subject.addError(UIError.unexpected.description);
       }
     } finally {
-      _isLoadingObserver.value = false;
+      isLoading = false;
     }
   }
 }
