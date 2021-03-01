@@ -29,7 +29,6 @@ class LocalSurveyModel {
     );
   }
 
-  // ignore: prefer_expression_function_bodies
   factory LocalSurveyModel.fromEntity(SurveyEntity entity) => LocalSurveyModel(
         id: entity.id,
         question: entity.question,
