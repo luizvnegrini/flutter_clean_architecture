@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:home_automation/domain/enums/enums.dart';
-import 'package:home_automation/ui/helpers/errors/errors.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
+import '../../domain/enums/enums.dart';
 import '../../domain/usecases/usecases.dart';
+import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/surveys/surveys.dart';
 import '../../utils/extensions/enum_extensions.dart';
 
