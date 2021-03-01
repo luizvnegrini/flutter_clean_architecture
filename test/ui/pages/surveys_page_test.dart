@@ -15,11 +15,13 @@ class SurveysPresenterSpy extends Mock implements ISurveysPresenter {}
 void main() {
   SurveysPresenterSpy presenter;
   StreamController<bool> isLoadingController;
+  StreamController<bool> isSessionExpiredController;
   StreamController<String> navigateToController;
   StreamController<List<SurveyViewModel>> loadSurveysController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
+    isSessionExpiredController = StreamController<bool>();
     loadSurveysController = StreamController<List<SurveyViewModel>>();
     navigateToController = StreamController<String>();
   }
@@ -28,6 +30,7 @@ void main() {
     when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
     when(presenter.surveysStream).thenAnswer((_) => loadSurveysController.stream);
     when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
+    when(presenter.isSessionExpiredStream).thenAnswer((_) => isSessionExpiredController.stream);
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -39,6 +42,7 @@ void main() {
       getPages: [
         GetPage(name: '/surveys', page: () => SurveysPage(presenter)),
         GetPage(name: '/any_route', page: () => const Scaffold(body: Text('fake page'))),
+        GetPage(name: '/login', page: () => const Scaffold(body: Text('fake login'))),
       ],
     );
 
@@ -58,6 +62,7 @@ void main() {
     isLoadingController.close();
     loadSurveysController.close();
     navigateToController.close();
+    isSessionExpiredController.close();
   }
 
   tearDown(closeStream);
@@ -143,5 +148,39 @@ void main() {
 
     expect(Get.currentRoute, '/any_route');
     expect(find.text('fake page'), findsOneWidget);
+  });
+
+  testWidgets('should not change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('');
+    await tester.pump();
+    expect(Get.currentRoute, '/surveys');
+
+    navigateToController.add(null);
+    await tester.pump();
+    expect(Get.currentRoute, '/surveys');
+  });
+
+  testWidgets('should logout', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isSessionExpiredController.add(true);
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/login');
+    expect(find.text('fake login'), findsOneWidget);
+  });
+
+  testWidgets('should not logout', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isSessionExpiredController.add(false);
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, '/surveys');
+
+    isSessionExpiredController.add(null);
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, '/surveys');
   });
 }

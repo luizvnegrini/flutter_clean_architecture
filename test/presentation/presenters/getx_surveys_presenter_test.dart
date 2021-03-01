@@ -35,6 +35,7 @@ void main() {
       ];
 
   void mockLoadSurveysError() => mockLoadSurveysCall().thenThrow(DomainError.unexpected);
+  void mockAccessDeniedError() => mockLoadSurveysCall().thenThrow(DomainError.accessDenied);
 
   void mockLoadSurveys(List<SurveyEntity> data) {
     surveys = data;
@@ -72,6 +73,17 @@ void main() {
     // ignore: unawaited_futures
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.surveysStream.listen(null, onError: expectAsync1((error) => expect(error, UIError.unexpected.description)));
+
+    await sut.loadData();
+  });
+
+  test('should emit correct events on access denied', () async {
+    mockAccessDeniedError();
+
+    // ignore: unawaited_futures
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    // ignore: unawaited_futures
+    expectLater(sut.isSessionExpiredStream, emits(true));
 
     await sut.loadData();
   });
