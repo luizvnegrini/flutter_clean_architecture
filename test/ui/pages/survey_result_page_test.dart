@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/route_manager.dart';
 import 'package:image_test_utils/image_test_utils.dart';
 import 'package:mockito/mockito.dart';
 
@@ -9,6 +8,8 @@ import 'package:home_automation/ui/helpers/errors/errors.dart';
 import 'package:home_automation/ui/helpers/i18n/i18n.dart';
 import 'package:home_automation/ui/pages/pages.dart';
 import 'package:home_automation/utils/extensions/enum_extensions.dart';
+
+import '../helpers/helpers.dart';
 
 class SurveyResultPresenterSpy extends Mock implements ISurveyResultPresenter {}
 
@@ -52,16 +53,8 @@ void main() {
     initStreams();
     mockStreams();
 
-    final surveysPage = GetMaterialApp(
-      initialRoute: '/survey_result/any_survey_id',
-      getPages: [
-        GetPage(name: '/survey_result/:survey_id', page: () => SurveyResultPage(presenter)),
-        GetPage(name: '/login', page: () => const Scaffold(body: Text('fake login'))),
-      ],
-    );
-
     await provideMockedNetworkImages(() async {
-      await tester.pumpWidget(surveysPage);
+      await tester.pumpWidget(makePage(initialRoute: '/survey_result/any_survey_id', page: () => SurveyResultPage(presenter)));
     });
   }
 
@@ -150,7 +143,7 @@ void main() {
     isSessionExpiredController.add(true);
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, '/login');
+    expect(currentRoute, '/login');
     expect(find.text('fake login'), findsOneWidget);
   });
 
@@ -159,11 +152,11 @@ void main() {
 
     isSessionExpiredController.add(false);
     await tester.pumpAndSettle();
-    expect(Get.currentRoute, '/survey_result/any_survey_id');
+    expect(currentRoute, '/survey_result/any_survey_id');
 
     isSessionExpiredController.add(null);
     await tester.pumpAndSettle();
-    expect(Get.currentRoute, '/survey_result/any_survey_id');
+    expect(currentRoute, '/survey_result/any_survey_id');
   });
 
   testWidgets('should call save on list item click', (WidgetTester tester) async {

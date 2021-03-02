@@ -2,12 +2,13 @@ import 'dart:async';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 
 import 'package:home_automation/ui/helpers/errors/errors.dart';
 import 'package:home_automation/ui/pages/signup/isignup_presenter.dart';
 import 'package:home_automation/ui/pages/signup/signup_page.dart';
+
+import '../helpers/helpers.dart';
 
 class ISignUpPresenterSpy extends Mock implements ISignUpPresenter {}
 
@@ -65,14 +66,7 @@ void main() {
     initStreams();
     mockStreams();
 
-    final signUpPage = GetMaterialApp(
-      initialRoute: '/signup',
-      getPages: [
-        GetPage(name: '/signup', page: () => SignUpPage(presenter)),
-        GetPage(name: '/any_route', page: () => const Scaffold(body: Text('fake page'))),
-      ],
-    );
-    await tester.pumpWidget(signUpPage);
+    await tester.pumpWidget(makePage(initialRoute: '/signup', page: () => SignUpPage(presenter)));
   }
 
   testWidgets('should call validate with correct values', (WidgetTester tester) async {
@@ -248,7 +242,7 @@ void main() {
     navigateToController.add('/any_route');
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, '/any_route');
+    expect(currentRoute, '/any_route');
     expect(find.text('fake page'), findsOneWidget);
   });
 
@@ -257,11 +251,11 @@ void main() {
 
     navigateToController.add('');
     await tester.pump();
-    expect(Get.currentRoute, '/signup');
+    expect(currentRoute, '/signup');
 
     navigateToController.add(null);
     await tester.pump();
-    expect(Get.currentRoute, '/signup');
+    expect(currentRoute, '/signup');
   });
 
   testWidgets('should call login on link click', (WidgetTester tester) async {

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 import '../../../ui/mixins/mixins.dart';
 import './isplash_screen_presenter.dart';
@@ -8,7 +7,7 @@ import './isplash_screen_presenter.dart';
 class SplashScreenPage extends StatelessWidget with NavigationManager {
   final ISplashScreenPresenter presenter;
 
-  const SplashScreenPage({@required this.presenter});
+  const SplashScreenPage(this.presenter);
 
   @override
   Widget build(BuildContext context) {
