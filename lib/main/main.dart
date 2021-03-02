@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 import '../ui/components/components.dart';
 import './factories/factories.dart';
@@ -16,11 +16,13 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    final routeObserver = Get.put<RouteObserver>(RouteObserver<PageRoute>());
 
     return GetMaterialApp(
       title: 'Home automation',
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
+      navigatorObservers: [routeObserver],
       initialRoute: '/',
       getPages: const [
         GetPage(name: '/', page: makeSplashScreenPage, transition: Transition.fade),
