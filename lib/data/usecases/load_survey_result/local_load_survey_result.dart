@@ -36,10 +36,10 @@ class LocalLoadSurveyResult implements ILoadSurveyResult {
     }
   }
 
-  Future<void> save({@required String surveyId, @required SurveyResultEntity surveyResult}) async {
+  Future<void> save(SurveyResultEntity surveyResult) async {
     try {
       final json = LocalSurveyResultModel.fromEntity(surveyResult).toJson();
-      await cacheStorage.save(key: 'survey_result/$surveyId', value: json);
+      await cacheStorage.save(key: 'survey_result/$surveyResult.surveyId', value: json);
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
       // ignore: only_throw_errors
