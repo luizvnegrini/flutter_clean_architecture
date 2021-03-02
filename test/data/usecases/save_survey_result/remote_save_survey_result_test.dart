@@ -2,6 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:home_automation/domain/entities/entities.dart';
 import 'package:home_automation/domain/enums/enums.dart';
 import 'package:home_automation/data/usecases/usecases.dart';
 import 'package:home_automation/data/http/http.dart';
@@ -13,6 +14,7 @@ void main() {
   HttpClientSpy httpClient;
   String url;
   String answer;
+  Map surveyResult;
 
   PostExpectation mockRequest() => when(httpClient.request(
         url: anyNamed('url'),
@@ -20,13 +22,41 @@ void main() {
         body: anyNamed('body'),
       ));
 
+  void mockHttpData(Map data) {
+    surveyResult = data;
+    mockRequest().thenAnswer((_) async => data);
+  }
+
   void mockHttpError(HttpError error) => mockRequest().thenThrow(error);
+
+  Map mockValidData() => {
+        'surveyId': faker.guid.guid(),
+        'question': faker.randomGenerator.string(50),
+        'date': faker.date.dateTime().toIso8601String(),
+        'answers': [
+          {
+            'image': faker.internet.httpUrl(),
+            'answer': faker.randomGenerator.string(20),
+            'percent': faker.randomGenerator.integer(100),
+            'count': faker.randomGenerator.integer(1000),
+            'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
+          },
+          {
+            'answer': faker.randomGenerator.string(20),
+            'percent': faker.randomGenerator.integer(100),
+            'count': faker.randomGenerator.integer(1000),
+            'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
+          },
+        ]
+      };
 
   setUp(() {
     url = faker.internet.httpUrl();
     httpClient = HttpClientSpy();
     sut = RemoteSaveSurveyResult(url: url, httpClient: httpClient);
     answer = faker.lorem.sentence();
+
+    mockHttpData(mockValidData());
   });
 
   test('should call HttpClient with correct values', () async {
@@ -37,6 +67,31 @@ void main() {
       method: 'put',
       body: {'answer': answer},
     ));
+  });
+
+  test('should return surveyResult on 200', () async {
+    final result = await sut.save(answer: answer);
+
+    expect(
+      result,
+      SurveyResultEntity(
+        surveyId: surveyResult['surveyId'],
+        question: surveyResult['question'],
+        answers: [
+          SurveyAnswerEntity(
+            image: surveyResult['answers'][0]['image'],
+            answer: surveyResult['answers'][0]['answer'],
+            isCurrentAnswer: surveyResult['answers'][0]['isCurrentAccountAnswer'],
+            percent: surveyResult['answers'][0]['percent'],
+          ),
+          SurveyAnswerEntity(
+            answer: surveyResult['answers'][1]['answer'],
+            isCurrentAnswer: surveyResult['answers'][1]['isCurrentAccountAnswer'],
+            percent: surveyResult['answers'][1]['percent'],
+          ),
+        ],
+      ),
+    );
   });
 
   test('should throw UnexpectedError if HttpClient returns 404', () async {
