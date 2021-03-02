@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
+import '../../domain/entities/entities.dart';
 import '../../domain/enums/enums.dart';
 import '../../domain/usecases/usecases.dart';
 import '../../presentation/mixins/mixins.dart';
@@ -10,6 +11,7 @@ import '../../utils/extensions/enum_extensions.dart';
 
 class GetxSurveyResultPresenter extends GetxController with SessionManager, LoadingManager implements ISurveyResultPresenter {
   final ILoadSurveyResult loadSurveyResult;
+  final ISaveSurveyResult saveSurveyResult;
   final String surveyId;
 
   final _surveyResult = Rx<SurveyResultViewModel>();
@@ -19,14 +21,14 @@ class GetxSurveyResultPresenter extends GetxController with SessionManager, Load
 
   GetxSurveyResultPresenter({
     @required this.loadSurveyResult,
+    @required this.saveSurveyResult,
     @required this.surveyId,
   });
 
-  @override
-  Future<void> loadData() async {
+  Future<void> showResultOnAction(Future<SurveyResultEntity> Function() action) async {
     try {
       isLoading = true;
-      final surveyResult = await loadSurveyResult.loadBySurvey(surveyId: surveyId);
+      final surveyResult = await action();
       _surveyResult.value = SurveyResultViewModel(
         surveyId: surveyResult.surveyId,
         question: surveyResult.question,
@@ -51,7 +53,12 @@ class GetxSurveyResultPresenter extends GetxController with SessionManager, Load
   }
 
   @override
-  Future<void> save({String answer}) {
-    throw Exception();
+  Future<void> loadData() async {
+    await showResultOnAction(() => loadSurveyResult.loadBySurvey(surveyId: surveyId));
+  }
+
+  @override
+  Future<void> save({@required String answer}) async {
+    await showResultOnAction(() => saveSurveyResult.save(answer: answer));
   }
 }
