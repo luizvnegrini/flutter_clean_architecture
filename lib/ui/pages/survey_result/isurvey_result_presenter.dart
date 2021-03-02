@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import './survey_result.dart';
 
 abstract class ISurveyResultPresenter {
@@ -6,4 +7,5 @@ abstract class ISurveyResultPresenter {
   Stream<SurveyResultViewModel> get surveyResultStream;
 
   Future<void> loadData();
+  Future<void> save({@required String answer});
 }
