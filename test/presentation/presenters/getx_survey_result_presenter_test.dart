@@ -10,6 +10,8 @@ import 'package:home_automation/domain/enums/enums.dart';
 import 'package:home_automation/domain/usecases/usecases.dart';
 import 'package:home_automation/utils/extensions/enum_extensions.dart';
 
+import '../../mocks/mocks.dart';
+
 class LoadSurveyResultSpy extends Mock implements ILoadSurveyResult {}
 
 class SaveSurveyResultSpy extends Mock implements ISaveSurveyResult {}
@@ -26,20 +28,6 @@ void main() {
   PostExpectation mockLoadSurveyResultCall() => when(loadSurveyResult.loadBySurvey(surveyId: anyNamed('surveyId')));
 
   PostExpectation mockSaveSurveyResultCall() => when(saveSurveyResult.save(answer: anyNamed('answer')));
-
-  SurveyResultEntity mockValidData() => SurveyResultEntity(surveyId: faker.guid.guid(), question: faker.lorem.sentence(), answers: [
-        SurveyAnswerEntity(
-          image: faker.internet.httpUrl(),
-          answer: faker.lorem.sentence(),
-          isCurrentAnswer: faker.randomGenerator.boolean(),
-          percent: faker.randomGenerator.integer(100),
-        ),
-        SurveyAnswerEntity(
-          answer: faker.lorem.sentence(),
-          isCurrentAnswer: faker.randomGenerator.boolean(),
-          percent: faker.randomGenerator.integer(100),
-        ),
-      ]);
 
   void mockLoadSurveyResultError(DomainError error) => mockLoadSurveyResultCall().thenThrow(error);
 
@@ -85,8 +73,8 @@ void main() {
       surveyId: surveyId,
     );
 
-    mockLoadSurveyResult(mockValidData());
-    mockSaveSurveyResult(mockValidData());
+    mockLoadSurveyResult(FakeSurveyResultFactory.makeEntity());
+    mockSaveSurveyResult(FakeSurveyResultFactory.makeEntity());
   });
 
   group('loadData', () {

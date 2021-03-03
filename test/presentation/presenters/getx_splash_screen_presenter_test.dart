@@ -1,4 +1,3 @@
-import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -6,11 +5,13 @@ import 'package:home_automation/presentation/presenters/presenters.dart';
 import 'package:home_automation/domain/entities/account_entity.dart';
 import 'package:home_automation/domain/usecases/usecases.dart';
 
+import '../../mocks/mocks.dart';
+
 class LoadCurrentAccountSpy extends Mock implements ILoadCurrentAccount {}
 
 void main() {
-  LoadCurrentAccountSpy loadCurrentAccount;
   GetxSplashScreenPresenter sut;
+  LoadCurrentAccountSpy loadCurrentAccount;
 
   PostExpectation mockLoadCurrentAccountCall() => when(loadCurrentAccount.load());
 
@@ -26,7 +27,7 @@ void main() {
     loadCurrentAccount = LoadCurrentAccountSpy();
     sut = GetxSplashScreenPresenter(loadCurrentAccount: loadCurrentAccount);
 
-    mockLoadCurrentAccount(account: AccountEntity(faker.guid.guid()));
+    mockLoadCurrentAccount(account: FakeAccountFactory.makeEntity());
   });
 
   test('should call LoadCurrentAccount', () async {
@@ -50,7 +51,7 @@ void main() {
   });
 
   test('should go to login page on null token', () async {
-    mockLoadCurrentAccount(account: const AccountEntity(null));
+    mockLoadCurrentAccount(account: const AccountEntity(token: null));
 
     sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/login')));
 

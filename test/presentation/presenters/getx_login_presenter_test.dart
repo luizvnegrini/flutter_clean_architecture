@@ -10,6 +10,8 @@ import 'package:home_automation/domain/usecases/usecases.dart';
 import 'package:home_automation/presentation/presenters/presenters.dart';
 import 'package:home_automation/presentation/protocols/protocols.dart';
 
+import '../../mocks/mocks.dart';
+
 class ValidationSpy extends Mock implements IValidation {}
 
 class AuthenticationSpy extends Mock implements IAuthentication {}
@@ -23,7 +25,7 @@ void main() {
   ValidationSpy validation;
   String email;
   String password;
-  String token;
+  AccountEntity account;
 
   PostExpectation mockValidationCall(String field) => when(validation.validate(field: field ?? anyNamed('field'), input: anyNamed('input')));
   PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
@@ -33,8 +35,9 @@ void main() {
     mockValidationCall(field).thenReturn(value);
   }
 
-  void mockAuthentication() {
-    mockAuthenticationCall().thenAnswer((_) async => AccountEntity(token));
+  void mockAuthentication(AccountEntity data) {
+    account = data;
+    mockAuthenticationCall().thenAnswer((_) async => data);
   }
 
   void mockAuthenticationError(DomainError error) {
@@ -56,10 +59,9 @@ void main() {
     );
     email = faker.internet.email();
     password = faker.internet.password();
-    token = faker.guid.guid();
 
     mockValidation();
-    mockAuthentication();
+    mockAuthentication(FakeAccountFactory.makeEntity());
   });
 
   test('should call validation with correct email', () {
@@ -166,7 +168,7 @@ void main() {
 
     await sut.auth();
 
-    verify(saveCurrentAccount.save(AccountEntity(token))).called(1);
+    verify(saveCurrentAccount.save(account)).called(1);
   });
 
   test('should emit correct events on Authentication success', () async {

@@ -7,6 +7,7 @@ import 'package:home_automation/domain/enums/enums.dart';
 import 'package:home_automation/data/http/http.dart';
 import 'package:home_automation/data/enums/enums.dart';
 import 'package:home_automation/data/usecases/usecases.dart';
+import '../../../mocks/mocks.dart';
 
 class HttpClientSpy extends Mock implements IHttpClient {}
 
@@ -15,6 +16,7 @@ void main() {
   String url;
   RemoteAddAccount sut;
   AddAccountParams params;
+  Map apiResult;
 
   PostExpectation mockRequest() => when(httpClient.request(
         url: anyNamed('url'),
@@ -26,9 +28,8 @@ void main() {
     mockRequest().thenThrow(error);
   }
 
-  Map mockValidData() => {'accessToken': faker.guid.guid(), 'name': faker.person.name()};
-
   void mockHttpData(Map data) {
+    apiResult = data;
     mockRequest().thenAnswer((_) async => data);
   }
 
@@ -36,14 +37,9 @@ void main() {
     httpClient = HttpClientSpy();
     url = faker.internet.httpUrl();
     sut = RemoteAddAccount(httpClient: httpClient, url: url);
-    params = AddAccountParams(
-      name: faker.person.name(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      passwordConfirmation: faker.internet.password(),
-    );
+    params = FakeParamsFactory.makeAddAccount();
 
-    mockHttpData(mockValidData());
+    mockHttpData(FakeAccountFactory.makeApiJson());
   });
 
   test('should call HttpClient with correct values', () async {
@@ -94,12 +90,9 @@ void main() {
   });
 
   test('should return an Account if HttpClient returns 200', () async {
-    final validData = mockValidData();
-    mockHttpData(validData);
-
     final account = await sut.add(params);
 
-    expect(account.token, validData['accessToken']);
+    expect(account.token, apiResult['accessToken']);
   });
 
   test('should throw UnexpectedError if HttpClient returns 200 with invalid data', () async {

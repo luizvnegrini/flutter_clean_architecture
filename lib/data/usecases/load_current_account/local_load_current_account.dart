@@ -14,7 +14,7 @@ class LocalLoadCurrentAccount implements ILoadCurrentAccount {
   Future<AccountEntity> load() async {
     try {
       final token = await fetchSecureCacheStorage.fetch('token');
-      return AccountEntity(token);
+      return AccountEntity(token: token);
       // ignore: avoid_catches_without_on_clauses
     } catch (error) {
       // ignore: only_throw_errors
