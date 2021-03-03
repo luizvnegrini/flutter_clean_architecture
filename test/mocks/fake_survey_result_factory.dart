@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 
 import 'package:home_automation/domain/entities/entities.dart';
+import 'package:home_automation/ui/pages/pages.dart';
 
 class FakeSurveyResultFactory {
   static Map makeCacheJson() => {
@@ -53,6 +54,24 @@ class FakeSurveyResultFactory {
             isCurrentAnswer: false,
             percent: 60,
           )
+        ],
+      );
+
+  static SurveyResultViewModel makeViewModel() => const SurveyResultViewModel(
+        surveyId: 'Any id',
+        question: 'Question',
+        answers: [
+          SurveyAnswerViewModel(
+            answer: 'Answer 0',
+            isCurrentAnswer: true,
+            percent: '60%',
+            image: 'Image 0',
+          ),
+          SurveyAnswerViewModel(
+            answer: 'Answer 1',
+            isCurrentAnswer: false,
+            percent: '40%',
+          ),
         ],
       );
 

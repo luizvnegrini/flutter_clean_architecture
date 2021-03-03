@@ -9,6 +9,7 @@ import 'package:home_automation/ui/helpers/i18n/i18n.dart';
 import 'package:home_automation/ui/pages/pages.dart';
 import 'package:home_automation/utils/extensions/enum_extensions.dart';
 
+import '../../mocks/mocks.dart';
 import '../helpers/helpers.dart';
 
 class SurveyResultPresenterSpy extends Mock implements ISurveyResultPresenter {}
@@ -30,24 +31,6 @@ void main() {
     when(presenter.surveyResultStream).thenAnswer((_) => surveyResultController.stream);
     when(presenter.isSessionExpiredStream).thenAnswer((_) => isSessionExpiredController.stream);
   }
-
-  SurveyResultViewModel makeSurveyResult() => const SurveyResultViewModel(
-        surveyId: 'Any id',
-        question: 'Question',
-        answers: [
-          SurveyAnswerViewModel(
-            answer: 'Answer 0',
-            isCurrentAnswer: true,
-            percent: '60%',
-            image: 'Image 0',
-          ),
-          SurveyAnswerViewModel(
-            answer: 'Answer 1',
-            isCurrentAnswer: false,
-            percent: '40%',
-          ),
-        ],
-      );
 
   Future<void> loadPage(WidgetTester tester) async {
     initStreams();
@@ -119,7 +102,7 @@ void main() {
   testWidgets('should present valid data if surveyResultStream succeeds', (WidgetTester tester) async {
     await loadPage(tester);
 
-    surveyResultController.add(makeSurveyResult());
+    surveyResultController.add(FakeSurveyResultFactory.makeViewModel());
     await provideMockedNetworkImages(() async {
       await tester.pump();
     });
@@ -162,7 +145,7 @@ void main() {
   testWidgets('should call save on list item click', (WidgetTester tester) async {
     await loadPage(tester);
 
-    surveyResultController.add(makeSurveyResult());
+    surveyResultController.add(FakeSurveyResultFactory.makeViewModel());
     await provideMockedNetworkImages(() async {
       await tester.pump();
     });
@@ -174,7 +157,7 @@ void main() {
   testWidgets('should not call save on current answer click', (WidgetTester tester) async {
     await loadPage(tester);
 
-    surveyResultController.add(makeSurveyResult());
+    surveyResultController.add(FakeSurveyResultFactory.makeViewModel());
     await provideMockedNetworkImages(() async {
       await tester.pump();
     });

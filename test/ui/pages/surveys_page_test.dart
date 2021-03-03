@@ -9,6 +9,7 @@ import 'package:home_automation/ui/pages/pages.dart';
 import 'package:home_automation/ui/pages/surveys/surveys.dart';
 import 'package:home_automation/utils/extensions/enum_extensions.dart';
 
+import '../../mocks/mocks.dart';
 import '../helpers/helpers.dart';
 
 class SurveysPresenterSpy extends Mock implements ISurveysPresenter {}
@@ -40,11 +41,6 @@ void main() {
 
     await tester.pumpWidget(makePage(initialRoute: '/surveys', page: () => SurveysPage(presenter)));
   }
-
-  List<SurveyViewModel> makeSurveys() => [
-        const SurveyViewModel(id: '1', question: 'Question 1', date: 'Date 1', didAnswer: true),
-        const SurveyViewModel(id: '2', question: 'Question 2', date: 'Date 2', didAnswer: false),
-      ];
 
   setUp(() {
     presenter = SurveysPresenterSpy();
@@ -109,7 +105,7 @@ void main() {
   testWidgets('should present list if surveysStream succeeds', (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadSurveysController.add(makeSurveys());
+    loadSurveysController.add(FakeSurveysFactory.makeViewModels());
     await tester.pump();
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsNothing);
@@ -133,7 +129,7 @@ void main() {
   testWidgets('should call goToSurveyResult on survey click', (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadSurveysController.add(makeSurveys());
+    loadSurveysController.add(FakeSurveysFactory.makeViewModels());
     await tester.pump();
 
     await tester.tap(find.text('Question 1'));
